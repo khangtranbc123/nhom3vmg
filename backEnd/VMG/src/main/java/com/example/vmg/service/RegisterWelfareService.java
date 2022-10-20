@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class DangKyPhucLoiService {
+public class RegisterWelfareService {
     @Autowired private RegisterWelfareRepository registerWelfareRepository;
 
     public List<RegisterWelfare> getList() {

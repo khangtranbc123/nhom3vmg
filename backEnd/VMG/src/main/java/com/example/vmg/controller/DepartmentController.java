@@ -14,18 +14,18 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/api/PhongBan")
+@RequestMapping("/api")
 public class DepartmentController {
     @Autowired
     private PhongBanService phongBanService;
     @Autowired
     private DepartmentRepository departmentRepository;
 
-    @GetMapping("/listPhongBan")
+    @GetMapping("/departments")
     public List<Department> getListPhongBan(){
         return departmentRepository.findAll();
     }
-    @GetMapping("/createPhongBan")
+    @GetMapping("/department")
     public ResponseEntity<Void> addNhanVien(@ModelAttribute DepartmentForm departmentForm){
         Department department = new Department();
 
