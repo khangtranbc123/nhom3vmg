@@ -270,8 +270,6 @@ export default {
     }
   },
   created() {
-    // console.log("created");
-    // const self = this;
 
     staffApi.getAllStaff().then((res) => {
       // self.isLoaded = true;
