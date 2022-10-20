@@ -1,22 +1,24 @@
 package com.example.vmg.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-
+import java.util.List;
 @Getter
 @Setter
 @SuppressWarnings("serial")
 @Entity
-public class DangKyPhucLoi implements Serializable {
+public class Department implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String maNV;
-    private Integer trangThai;
-    @ManyToOne
-    @JoinColumn(name = "idPhucLoi")
-    private Welfare phucLoi;
+    private String name;
+    private Integer status;
+    @JsonIgnore
+    @OneToMany(mappedBy = "department")
+    private List<Staff> staffList;
+
 }

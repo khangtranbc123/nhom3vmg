@@ -1,8 +1,8 @@
 package com.example.vmg.controller;
 
-import com.example.vmg.form.NhanVienForm;
-import com.example.vmg.model.NhanVien;
-import com.example.vmg.respository.NhanVienRepository;
+import com.example.vmg.form.StaffForm;
+import com.example.vmg.model.Staff;
+import com.example.vmg.respository.StaffRepository;
 import com.example.vmg.service.NhanVienService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,37 +13,36 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/api/nhanvien")
-public class NhanVienController {
+@RequestMapping("/api")
+public class StaffController {
     @Autowired private NhanVienService nhanVienService;
 
-    @Autowired private NhanVienRepository nhanVienRepository;
+    @Autowired private StaffRepository staffRepository;
 
-    @GetMapping("/listnhanvien")
-    public List<NhanVien> getListNhanVien(){
+    @GetMapping("/staffs")
+    public List<Staff> getListNhanVien(){
         return nhanVienService.getList();
     }
-    @PostMapping("/createnhanvien")
-    public ResponseEntity<Void> addNhanVien(@ModelAttribute NhanVienForm nhanVienForm){
+    @PostMapping("/staff")
+    public ResponseEntity<Void> addNhanVien(@ModelAttribute StaffForm staffForm){
 
-        NhanVien nhanVien = new NhanVien();
-        nhanVien.setId(nhanVienForm.getId());
-        nhanVien.setMaNV(nhanVienForm.getMaNV());
-        nhanVien.setHoTen(nhanVienForm.getHoTen());
-        nhanVien.setNgaySinh(nhanVienForm.getNgaysinh());
-        nhanVien.setEmail(nhanVienForm.getEmail());
-        nhanVien.setTienPhucLoi(nhanVienForm.getTienPhucLoi());
-        nhanVien.setTrangThai(nhanVienForm.getTrangThai());
-        nhanVien.setPhongBan(nhanVienForm.getPhongBan());
-        nhanVien.setWelfareStaff(nhanVienForm.getWelfareStaff());
+        Staff staff = new Staff();
+        staff.setId(staffForm.getId());
+        staff.setCode(staffForm.getCode());
+        staff.setName(staffForm.getName());
+        staff.setDate(staffForm.getDate());
+        staff.setEmail(staffForm.getEmail());
+        staff.setWelfareMoney(staffForm.getWelfareMoney());
+        staff.setStatus(staffForm.getStatus());
+        staff.setDepartment(staffForm.getDepartment());
 
-        nhanVienService.saveOrUpDate(nhanVien);
+        nhanVienService.saveOrUpDate(staff);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/staff/{id}")
     public ResponseEntity<Void> deleteStaff(@PathVariable Long id){
-        NhanVien nhanVien = nhanVienService.getById(id);
+        Staff staff = nhanVienService.getById(id);
         nhanVienService.delete(id);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
