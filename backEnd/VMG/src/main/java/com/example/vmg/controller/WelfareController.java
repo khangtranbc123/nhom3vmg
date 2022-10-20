@@ -1,7 +1,8 @@
 package com.example.vmg.controller;
 
+import com.example.vmg.model.RegisterWelfare;
+
 import com.example.vmg.form.WelfareForm;
-import com.example.vmg.model.DangKyPhucLoi;
 import com.example.vmg.model.Welfare;
 import com.example.vmg.model.GeneralWelfare;
 import com.example.vmg.service.DangKyPhucLoiService;
@@ -57,7 +58,6 @@ public class WelfareController {
         Welfare phucLoi = welfareService.getById(id);
         welfareService.delete(id);
         return new ResponseEntity<Void>(HttpStatus.OK);
-
     }
     @DeleteMapping("/delete-phuc-loi-bi-dong/{id}")
     public ResponseEntity<Void> delete2(@PathVariable Long id){
@@ -90,12 +90,9 @@ public class WelfareController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         System.out.println(authentication.getName());
         String maNV = authentication.getName();
+        RegisterWelfare registerWelfare = new RegisterWelfare();
+        dangKyPhucLoiService.saveOrUpdate(registerWelfare);
         Welfare phucLoi = welfareService.getById(id);
-        DangKyPhucLoi dangKyPhucLoi = new DangKyPhucLoi();
-        dangKyPhucLoi.setMaNV(maNV);
-        dangKyPhucLoi.setPhucLoi(phucLoi);
-        dangKyPhucLoi.setTrangThai(0);
-        dangKyPhucLoiService.saveOrUpdate(dangKyPhucLoi);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 }

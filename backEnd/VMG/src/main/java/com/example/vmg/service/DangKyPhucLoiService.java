@@ -1,7 +1,7 @@
 package com.example.vmg.service;
 
-import com.example.vmg.model.DangKyPhucLoi;
-import com.example.vmg.respository.DangKyPhucLoiRepository;
+import com.example.vmg.model.RegisterWelfare;
+import com.example.vmg.respository.RegisterWelfareRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,28 +10,28 @@ import java.util.Optional;
 
 @Service
 public class DangKyPhucLoiService {
-    @Autowired private DangKyPhucLoiRepository dangKyPhucLoiRepository;
+    @Autowired private RegisterWelfareRepository registerWelfareRepository;
 
-    public List<DangKyPhucLoi> getList() {
-        return dangKyPhucLoiRepository.findAll();
+    public List<RegisterWelfare> getList() {
+        return registerWelfareRepository.findAll();
     }
 
-    public DangKyPhucLoi getById(Long id) {
-        return dangKyPhucLoiRepository.findById(id).get();
+    public RegisterWelfare getById(Long id) {
+        return registerWelfareRepository.findById(id).get();
     }
 
-    public Optional<DangKyPhucLoi> findById(Long id){
-        return dangKyPhucLoiRepository.findById(id);
+    public Optional<RegisterWelfare> findById(Long id){
+        return registerWelfareRepository.findById(id);
     }
 
-    public void saveOrUpdate(DangKyPhucLoi phucLoi) {
-        dangKyPhucLoiRepository.save(phucLoi);
+    public void saveOrUpdate(RegisterWelfare phucLoi) {
+        registerWelfareRepository.save(phucLoi);
     }
-    public void update(Long id, DangKyPhucLoi phucLoi) {
-        dangKyPhucLoiRepository.save(phucLoi);
+    public void update(Long id, RegisterWelfare phucLoi) {
+        registerWelfareRepository.save(phucLoi);
     }
 
     public void delete(Long id) {
-        dangKyPhucLoiRepository.deleteById(id);
+        registerWelfareRepository.deleteById(id);
     }
 }

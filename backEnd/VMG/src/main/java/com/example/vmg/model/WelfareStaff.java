@@ -13,7 +13,7 @@ public class WelfareStaff implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "idNhanVien")
-    private NhanVien nhanVien;
+    private Staff staff;
 
     @ManyToOne
     @JoinColumn(name = "idPhucLoi")
