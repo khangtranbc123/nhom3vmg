@@ -13,24 +13,24 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class NhanVien implements Serializable {
+public class Staff implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String maNV;
-    private String hoTen;
-    private Date ngaySinh;
+    private String code;
+    private String name;
+    private Date date;
     private String email;
-    private BigDecimal tienPhucLoi;
-    private Integer trangThai;
+    private BigDecimal welfareMoney;
+    private Integer status;
 
     @ManyToOne
     @JoinColumn(name = "idPhongBan")
-    private PhongBan phongBan;
+    private Department department;
 
 
     @JsonIgnore
-    @OneToMany(mappedBy = "nhanVien")
+    @OneToMany(mappedBy = "staff")
     private List<PhucLoiDangHuong> phucLoiDangHuong;
 
 

@@ -1,7 +1,7 @@
 package com.example.vmg.controller;
 
 import com.example.vmg.form.PhucLoiForm;
-import com.example.vmg.model.DangKyPhucLoi;
+import com.example.vmg.model.RegisterWelfare;
 import com.example.vmg.model.PhucLoi;
 import com.example.vmg.model.PhucLoiBiDong;
 import com.example.vmg.service.DangKyPhucLoiService;
@@ -91,11 +91,11 @@ public class PhucLoiController {
         System.out.println(authentication.getName());
         String maNV = authentication.getName();
         PhucLoi phucLoi = phucLoiService.getById(id);
-        DangKyPhucLoi dangKyPhucLoi = new DangKyPhucLoi();
-        dangKyPhucLoi.setMaNV(maNV);
-        dangKyPhucLoi.setPhucLoi(phucLoi);
-        dangKyPhucLoi.setTrangThai(0);
-        dangKyPhucLoiService.saveOrUpdate(dangKyPhucLoi);
+        RegisterWelfare registerWelfare = new RegisterWelfare();
+        registerWelfare.setMaNV(maNV);
+        registerWelfare.setPhucLoi(phucLoi);
+        registerWelfare.setTrangThai(0);
+        dangKyPhucLoiService.saveOrUpdate(registerWelfare);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 }

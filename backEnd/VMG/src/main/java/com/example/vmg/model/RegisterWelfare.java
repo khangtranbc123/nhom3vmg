@@ -10,13 +10,13 @@ import java.io.Serializable;
 @Setter
 @SuppressWarnings("serial")
 @Entity
-public class DangKyPhucLoi implements Serializable {
+public class RegisterWelfare implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String maNV;
-    private Integer trangThai;
+    private String code;
+    private Integer status;
     @ManyToOne
-    @JoinColumn(name = "idPhucLoi")
-    private PhucLoi phucLoi;
+    @JoinColumn(name = "IdWelfare")
+    private PhucLoi welfare;
 }

@@ -1,6 +1,6 @@
 package com.example.vmg.form;
 
-import com.example.vmg.model.PhongBan;
+import com.example.vmg.model.Department;
 import com.example.vmg.model.PhucLoiDangHuong;
 import lombok.Data;
 
@@ -11,12 +11,11 @@ import java.util.List;
 @Data
 public class NhanVienForm {
     private Long id;
-    private String maNV;
-    private String hoTen;
-    private Date ngaysinh;
+    private String code;
+    private String name;
+    private Date date;
     private String email;
-    private BigDecimal tienPhucLoi;
-    private Integer trangThai;
-    private PhongBan phongBan;
-    private List<PhucLoiDangHuong> phucLoiDangHuong;
+    private BigDecimal welfareMoney;
+    private Integer status;
+    private Department department;
 }

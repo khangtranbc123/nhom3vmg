@@ -1,6 +1,6 @@
 package com.example.vmg.form;
 
-import com.example.vmg.model.PhongBan;
+import com.example.vmg.model.Department;
 import com.example.vmg.model.PhucLoiDangHuong;
 import lombok.Data;
 
@@ -13,7 +13,7 @@ public class PhucLoiForm {
     private String ten;
     private String moTa;
     private BigDecimal giaTri;
-    private PhongBan phongBan;
+    private Department department;
     private List<PhucLoiDangHuong> phucLoiDangHuong;
 
 

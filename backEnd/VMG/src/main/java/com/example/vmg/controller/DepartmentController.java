@@ -1,10 +1,8 @@
 package com.example.vmg.controller;
 
-import com.example.vmg.form.NhanVienForm;
 import com.example.vmg.form.PhongBanForm;
-import com.example.vmg.model.NhanVien;
-import com.example.vmg.model.PhongBan;
-import com.example.vmg.respository.PhongBanRepository;
+import com.example.vmg.model.Department;
+import com.example.vmg.respository.DepartmentRepository;
 import com.example.vmg.service.PhongBanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,24 +15,24 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/api/PhongBan")
-public class PhongBanController  {
+public class DepartmentController {
     @Autowired
     private PhongBanService phongBanService;
     @Autowired
-    private PhongBanRepository phongBanRepository;
+    private DepartmentRepository departmentRepository;
 
     @GetMapping("/listPhongBan")
-    public List<PhongBan> getListPhongBan(){
-        return phongBanRepository.findAll();
+    public List<Department> getListPhongBan(){
+        return departmentRepository.findAll();
     }
     @GetMapping("/createPhongBan")
     public ResponseEntity<Void> addNhanVien(@ModelAttribute PhongBanForm phongBanForm){
-        PhongBan phongBan = new PhongBan();
+        Department department = new Department();
 
-        phongBan.setId(phongBanForm.getId());
-        phongBan.setTen(phongBanForm.getTen());
-        phongBan.setTrangThai(phongBanForm.getTrangThai());
-        phongBanService.saveOrUpDate(phongBan);
+        department.setId(phongBanForm.getId());
+        department.setName(phongBanForm.getName());
+        department.setStatus(phongBanForm.getStatus());
+        phongBanService.saveOrUpDate(department);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 }

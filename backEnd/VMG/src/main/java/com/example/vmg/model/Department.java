@@ -11,14 +11,14 @@ import java.util.List;
 @Setter
 @SuppressWarnings("serial")
 @Entity
-public class PhongBan implements Serializable {
+public class Department implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String ten;
-    private Integer TrangThai;
+    private String name;
+    private Integer status;
     @JsonIgnore
-    @OneToMany(mappedBy = "phongBan")
-    private List<NhanVien> nhanVienList;
+    @OneToMany(mappedBy = "department")
+    private List<Staff> staffList;
 
 }

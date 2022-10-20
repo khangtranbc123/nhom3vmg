@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class PhongBanForm {
     private Long Id;
-    private String Ten;
-    private Integer trangThai;
+    private String name;
+    private Integer status;
 }

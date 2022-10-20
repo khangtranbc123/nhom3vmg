@@ -1,7 +1,7 @@
 package com.example.vmg.service;
 
-import com.example.vmg.model.NhanVien;
-import com.example.vmg.respository.NhanVienRepository;
+import com.example.vmg.model.Staff;
+import com.example.vmg.respository.StaffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,26 +11,26 @@ import java.util.List;
 @Service
 public class NhanVienService {
     @Autowired
-    private NhanVienRepository nhanVienRepository;
+    private StaffRepository staffRepository;
 
-    public List<NhanVien> getList(){
-        return nhanVienRepository.findAll();
+    public List<Staff> getList(){
+        return staffRepository.findAll();
     }
 
-    public  NhanVien getById(Long id){
-        return nhanVienRepository.findById(id).get();
+    public Staff getById(Long id){
+        return staffRepository.findById(id).get();
     }
 
-    public void saveOrUpDate(NhanVien nhanVien){
-        nhanVienRepository.save(nhanVien);
+    public void saveOrUpDate(Staff staff){
+        staffRepository.save(staff);
     }
 
     public void delete(Long id){
-        nhanVienRepository.deleteById(id);
+        staffRepository.deleteById(id);
     }
     public void updateMoney(BigDecimal number, List<Long> longs) {
 //      personRepository.deleteByIdIn(new ArrayList<>(integers));
-        nhanVienRepository.updateMoney(number, longs);
+        staffRepository.updateMoney(number, longs);
         System.out.println("update money");
     }
 }

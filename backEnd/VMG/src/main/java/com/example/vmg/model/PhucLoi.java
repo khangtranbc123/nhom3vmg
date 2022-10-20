@@ -22,7 +22,7 @@ public class PhucLoi implements Serializable {
     private Integer trangThai;
     @JsonIgnore
     @OneToMany(mappedBy = "phucLoi")
-    private List<DangKyPhucLoi> dangKyPhucLoiList;
+    private List<RegisterWelfare> registerWelfareList;
 
 
 }
