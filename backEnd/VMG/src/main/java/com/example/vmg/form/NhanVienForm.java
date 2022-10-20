@@ -1,7 +1,7 @@
 package com.example.vmg.form;
 
 import com.example.vmg.model.PhongBan;
-import com.example.vmg.model.PhucLoiDangHuong;
+import com.example.vmg.model.WelfareStaff;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -18,5 +18,5 @@ public class NhanVienForm {
     private BigDecimal tienPhucLoi;
     private Integer trangThai;
     private PhongBan phongBan;
-    private List<PhucLoiDangHuong> phucLoiDangHuong;
+    private List<WelfareStaff> welfareStaff;
 }

@@ -10,14 +10,14 @@ import java.math.BigDecimal;
 @Entity
 @Getter
 @Setter
-public class PhucLoiBiDong implements Serializable {
+public class GeneralWelfare implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String ten;
-    private String moTa;
-    private BigDecimal giaTri;
-    private Integer trangThai;
+    private String name;
+    private String describe;
+    private BigDecimal price;
+    private Integer status;
 
 
 }
