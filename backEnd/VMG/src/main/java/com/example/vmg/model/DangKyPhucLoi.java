@@ -18,5 +18,5 @@ public class DangKyPhucLoi implements Serializable {
     private Integer trangThai;
     @ManyToOne
     @JoinColumn(name = "idPhucLoi")
-    private PhucLoi phucLoi;
+    private Welfare phucLoi;
 }

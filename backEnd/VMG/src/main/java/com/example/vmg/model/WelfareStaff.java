@@ -5,11 +5,11 @@ import java.io.Serializable;
 
 @SuppressWarnings("serial")
 @Entity
-public class PhucLoiDangHuong implements Serializable {
+public class WelfareStaff implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer trangThai;
+    private Integer status;
 
     @ManyToOne
     @JoinColumn(name = "idNhanVien")
@@ -17,6 +17,6 @@ public class PhucLoiDangHuong implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "idPhucLoi")
-    private PhucLoi phucLoi;
+    private Welfare welfare;
 
 }

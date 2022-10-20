@@ -35,7 +35,7 @@ public class NhanVienController {
         nhanVien.setTienPhucLoi(nhanVienForm.getTienPhucLoi());
         nhanVien.setTrangThai(nhanVienForm.getTrangThai());
         nhanVien.setPhongBan(nhanVienForm.getPhongBan());
-        nhanVien.setPhucLoiDangHuong(nhanVienForm.getPhucLoiDangHuong());
+        nhanVien.setWelfareStaff(nhanVienForm.getWelfareStaff());
 
         nhanVienService.saveOrUpDate(nhanVien);
         return new ResponseEntity<Void>(HttpStatus.OK);
