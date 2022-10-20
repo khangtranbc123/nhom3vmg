@@ -18,5 +18,6 @@ public class RegisterWelfare implements Serializable {
     private Integer status;
     @ManyToOne
     @JoinColumn(name = "IdWelfare")
-    private PhucLoi welfare;
+    private Welfare welfare;
+
 }

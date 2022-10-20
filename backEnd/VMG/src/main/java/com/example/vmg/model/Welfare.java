@@ -12,14 +12,14 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class PhucLoi implements Serializable {
+public class Welfare implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String ten;
-    private String moTa;
-    private BigDecimal giaTri;
-    private Integer trangThai;
+    private String name;
+    private String describe;
+    private BigDecimal price;
+    private Integer status;
     @JsonIgnore
     @OneToMany(mappedBy = "phucLoi")
     private List<RegisterWelfare> registerWelfareList;

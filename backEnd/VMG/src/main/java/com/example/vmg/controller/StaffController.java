@@ -1,6 +1,6 @@
 package com.example.vmg.controller;
 
-import com.example.vmg.form.NhanVienForm;
+import com.example.vmg.form.StaffForm;
 import com.example.vmg.model.Staff;
 import com.example.vmg.respository.StaffRepository;
 import com.example.vmg.service.NhanVienService;
@@ -13,35 +13,34 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/api/nhanvien")
+@RequestMapping("/api")
 public class StaffController {
     @Autowired private NhanVienService nhanVienService;
 
     @Autowired private StaffRepository staffRepository;
 
-    @GetMapping("/listnhanvien")
+    @GetMapping("/staffs")
     public List<Staff> getListNhanVien(){
         return nhanVienService.getList();
     }
-    @PostMapping("/createnhanvien")
-    public ResponseEntity<Void> addNhanVien(@ModelAttribute NhanVienForm nhanVienForm){
+    @PostMapping("/staff")
+    public ResponseEntity<Void> addNhanVien(@ModelAttribute StaffForm staffForm){
 
         Staff staff = new Staff();
-        staff.setId(nhanVienForm.getId());
-        staff.setCode(nhanVienForm.getCode());
-        staff.setName(nhanVienForm.getName());
-        staff.setDate(nhanVienForm.getDate());
-        staff.setEmail(nhanVienForm.getEmail());
-        staff.setWelfareMoney(nhanVienForm.getWelfareMoney());
-        staff.setStatus(nhanVienForm.getStatus());
-        staff.setDepartment(nhanVienForm.getDepartment());
-//        staff.setPhucLoiDangHuong(nhanVienForm.);
+        staff.setId(staffForm.getId());
+        staff.setCode(staffForm.getCode());
+        staff.setName(staffForm.getName());
+        staff.setDate(staffForm.getDate());
+        staff.setEmail(staffForm.getEmail());
+        staff.setWelfareMoney(staffForm.getWelfareMoney());
+        staff.setStatus(staffForm.getStatus());
+        staff.setDepartment(staffForm.getDepartment());
 
         nhanVienService.saveOrUpDate(staff);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/staff/{id}")
     public ResponseEntity<Void> deleteStaff(@PathVariable Long id){
         Staff staff = nhanVienService.getById(id);
         nhanVienService.delete(id);

@@ -1,6 +1,6 @@
 package com.example.vmg.controller;
 
-import com.example.vmg.form.PhongBanForm;
+import com.example.vmg.form.DepartmentForm;
 import com.example.vmg.model.Department;
 import com.example.vmg.respository.DepartmentRepository;
 import com.example.vmg.service.PhongBanService;
@@ -26,12 +26,12 @@ public class DepartmentController {
         return departmentRepository.findAll();
     }
     @GetMapping("/createPhongBan")
-    public ResponseEntity<Void> addNhanVien(@ModelAttribute PhongBanForm phongBanForm){
+    public ResponseEntity<Void> addNhanVien(@ModelAttribute DepartmentForm departmentForm){
         Department department = new Department();
 
-        department.setId(phongBanForm.getId());
-        department.setName(phongBanForm.getName());
-        department.setStatus(phongBanForm.getStatus());
+        department.setId(departmentForm.getId());
+        department.setName(departmentForm.getName());
+        department.setStatus(departmentForm.getStatus());
         phongBanService.saveOrUpDate(department);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

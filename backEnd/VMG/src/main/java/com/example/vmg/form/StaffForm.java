@@ -1,15 +1,16 @@
 package com.example.vmg.form;
 
+
 import com.example.vmg.model.Department;
-import com.example.vmg.model.PhucLoiDangHuong;
+
+
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 @Data
-public class NhanVienForm {
+public class StaffForm {
     private Long id;
     private String code;
     private String name;

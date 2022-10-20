@@ -31,7 +31,7 @@ public class Staff implements Serializable {
 
     @JsonIgnore
     @OneToMany(mappedBy = "staff")
-    private List<PhucLoiDangHuong> phucLoiDangHuong;
+    private List<WelfareStaff> welfareStaff;
 
 
 

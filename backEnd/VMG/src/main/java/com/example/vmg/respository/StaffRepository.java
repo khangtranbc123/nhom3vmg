@@ -13,6 +13,6 @@ public interface StaffRepository extends JpaRepository<Staff,Long> {
 
     @Modifying
     @Transactional
-    @Query("update Staff p set p.tienPhucLoi = :number where p.id in(:longs)")
+    @Query("update Staff p set p.welfareMoney = :number where p.id in(:longs)")
     void updateMoney(BigDecimal number, List<Long> longs);
 }
