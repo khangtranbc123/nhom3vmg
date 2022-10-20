@@ -3,7 +3,7 @@ package com.example.vmg.controller;
 import com.example.vmg.form.StaffForm;
 import com.example.vmg.model.Staff;
 import com.example.vmg.respository.StaffRepository;
-import com.example.vmg.service.NhanVienService;
+import com.example.vmg.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +15,13 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 @RequestMapping("/api")
 public class StaffController {
-    @Autowired private NhanVienService nhanVienService;
+    @Autowired private StaffService staffService;
 
     @Autowired private StaffRepository staffRepository;
 
     @GetMapping("/staffs")
     public List<Staff> getListNhanVien(){
-        return nhanVienService.getList();
+        return staffService.getList();
     }
     @PostMapping("/staff")
     public ResponseEntity<Void> addNhanVien(@ModelAttribute StaffForm staffForm){
@@ -36,14 +36,14 @@ public class StaffController {
         staff.setStatus(staffForm.getStatus());
         staff.setDepartment(staffForm.getDepartment());
 
-        nhanVienService.saveOrUpDate(staff);
+        staffService.saveOrUpDate(staff);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @DeleteMapping("/staff/{id}")
     public ResponseEntity<Void> deleteStaff(@PathVariable Long id){
-        Staff staff = nhanVienService.getById(id);
-        nhanVienService.delete(id);
+        Staff staff = staffService.getById(id);
+        staffService.delete(id);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 

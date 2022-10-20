@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Service
-public class NhanVienService {
+public class StaffService {
     @Autowired
     private StaffRepository staffRepository;
 
