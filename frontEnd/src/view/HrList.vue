@@ -226,19 +226,7 @@ export default {
           ten: "Lãnh Đạo",
         }
       ],
-      hrList: [
-        // {
-        //   name: "Nguyễn Văn B",
-        //   code: "NV002",
-        //   gender: "Nam",
-        //   email: "nguyenvanb@gmail.com",
-        //   birthday: "04/07/1998",
-        //   address: "Hà Nội",
-        //   maritalStatus: "Đã kết hôn",
-        //   position: "Trưởng phòng",
-        //   department: "Phòng kế toán",
-        //   hobby: "Đá bóng",
-        // }     
+      hrList: [  
       ],
     };
   },
