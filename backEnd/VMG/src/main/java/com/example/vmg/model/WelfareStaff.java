@@ -12,11 +12,11 @@ public class WelfareStaff implements Serializable {
     private Integer status;
 
     @ManyToOne
-    @JoinColumn(name = "idNhanVien")
+    @JoinColumn(name = "idStaff")
     private Staff staff;
 
     @ManyToOne
-    @JoinColumn(name = "idPhucLoi")
+    @JoinColumn(name = "idWelfare")
     private Welfare welfare;
 
 }
