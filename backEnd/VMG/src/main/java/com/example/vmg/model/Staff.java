@@ -25,7 +25,7 @@ public class Staff implements Serializable {
     private Integer status;
 
     @ManyToOne
-    @JoinColumn(name = "idPhongBan")
+    @JoinColumn(name = "idDepartment")
     private Department department;
 
 

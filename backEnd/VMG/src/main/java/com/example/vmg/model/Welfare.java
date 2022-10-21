@@ -17,12 +17,16 @@ public class Welfare implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String describe;
+    private String text;
     private BigDecimal price;
     private Integer status;
-    @JsonIgnore
-    @OneToMany(mappedBy = "phucLoi")
-    private List<RegisterWelfare> registerWelfareList;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "welfare")
+    private List<WelfareStaff> welfareStaffList;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "welfare")
+    private List<RegisterWelfare> registerWelfareList;
 
 }

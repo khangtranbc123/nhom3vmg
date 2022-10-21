@@ -5,7 +5,7 @@ import com.example.vmg.model.RegisterWelfare;
 import com.example.vmg.form.WelfareForm;
 import com.example.vmg.model.Welfare;
 import com.example.vmg.model.GeneralWelfare;
-import com.example.vmg.service.DangKyPhucLoiService;
+import com.example.vmg.service.RegisterWelfareService;
 import com.example.vmg.service.GeneralWelfareService;
 import com.example.vmg.service.WelfareService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,79 +19,78 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/api/phucloi")
+@RequestMapping("/api")
 public class WelfareController {
     @Autowired private WelfareService welfareService;
     @Autowired private GeneralWelfareService generalWelfareService;
-    @Autowired private DangKyPhucLoiService dangKyPhucLoiService;
+    @Autowired private RegisterWelfareService registerWelfareService;
 
-    @GetMapping("/list")
+    @GetMapping("/welfares")
     public List<Welfare> getlist(){
         return welfareService.getList();
     }
-    @GetMapping("/list-phuc-loi-bi-dong")
+    @GetMapping("/general-welfanes")
     public List<GeneralWelfare> getlistPhucLoiBiDong(){
         return generalWelfareService.getList();
     }
-    @PostMapping("/create")
+    @PostMapping("/welfare")
     public ResponseEntity<Void> addPhucLoi(@ModelAttribute WelfareForm welfareForm){
         Welfare phucLoi = new Welfare();
         phucLoi.setName(welfareForm.getName());
-        phucLoi.setDescribe(welfareForm.getDescribe());
+        phucLoi.setText(welfareForm.getText());
         phucLoi.setPrice(welfareForm.getPrice());
         welfareService.saveOrUpdate(phucLoi);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
-    @PostMapping("/create-phucloi-bidong")
+    @PostMapping("/general-welfane")
     public ResponseEntity<Void> addPhucLoiBiDong(@ModelAttribute WelfareForm welfareForm){
         GeneralWelfare generalWelfare = new GeneralWelfare();
         generalWelfare.setName(welfareForm.getName());
-        generalWelfare.setDescribe(welfareForm.getDescribe());
-        generalWelfare.setPrice(welfareForm.getPrice());
+        generalWelfare.setText(welfareForm.getText());
+        generalWelfare.setPricee(welfareForm.getPrice());
         generalWelfareService.saveOrUpdate(generalWelfare);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/welfare/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         Welfare phucLoi = welfareService.getById(id);
         welfareService.delete(id);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
-    @DeleteMapping("/delete-phuc-loi-bi-dong/{id}")
+    @DeleteMapping("/general-welfane/{id}")
     public ResponseEntity<Void> delete2(@PathVariable Long id){
         GeneralWelfare generalWelfare = generalWelfareService.getById(id);
         generalWelfareService.delete(id);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/welfare/{id}")
     public ResponseEntity<Void> update(@PathVariable Long id, @ModelAttribute WelfareForm welfareForm){
         Welfare phucLoi = welfareService.findById(id).get();
         phucLoi.setName(welfareForm.getName());
-        phucLoi.setDescribe(welfareForm.getDescribe());
+        phucLoi.setText(welfareForm.getText());
         phucLoi.setPrice(welfareForm.getPrice());
         welfareService.update(id, phucLoi);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
-    @PutMapping("/update-phuc-loi-bi-dong/{id}")
+    @PutMapping("/general-welfane/{id}")
     public ResponseEntity<Void> update2(@PathVariable Long id, @ModelAttribute WelfareForm welfareForm){
         GeneralWelfare generalWelfare = generalWelfareService.findById(id).get();
         generalWelfare.setName(welfareForm.getName());
-        generalWelfare.setDescribe(welfareForm.getDescribe());
-        generalWelfare.setPrice(welfareForm.getPrice());
+        generalWelfare.setPricee(welfareForm.getPrice());
         generalWelfareService.update(id, generalWelfare);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @PostMapping("/dangky/{id}")
+    @PostMapping("/dangkyphucloi/{id}")
     public ResponseEntity<Void> DangKyPhucLoi(@PathVariable Long id){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         System.out.println(authentication.getName());
         String maNV = authentication.getName();
         RegisterWelfare registerWelfare = new RegisterWelfare();
-        dangKyPhucLoiService.saveOrUpdate(registerWelfare);
+        registerWelfareService.saveOrUpdate(registerWelfare);
         Welfare phucLoi = welfareService.getById(id);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
