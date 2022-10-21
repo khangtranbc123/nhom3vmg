@@ -17,7 +17,7 @@ public class Welfare implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String describe;
+    private String text;
     private BigDecimal price;
     private Integer status;
 
@@ -28,9 +28,5 @@ public class Welfare implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "welfare")
     private List<RegisterWelfare> registerWelfareList;
-
-
-
-
 
 }

@@ -37,7 +37,7 @@ public class WelfareController {
     public ResponseEntity<Void> addPhucLoi(@ModelAttribute WelfareForm welfareForm){
         Welfare phucLoi = new Welfare();
         phucLoi.setName(welfareForm.getName());
-        phucLoi.setDescribe(welfareForm.getDescribe());
+        phucLoi.setText(welfareForm.getText());
         phucLoi.setPrice(welfareForm.getPrice());
         welfareService.saveOrUpdate(phucLoi);
         return new ResponseEntity<Void>(HttpStatus.OK);
@@ -46,8 +46,8 @@ public class WelfareController {
     public ResponseEntity<Void> addPhucLoiBiDong(@ModelAttribute WelfareForm welfareForm){
         GeneralWelfare generalWelfare = new GeneralWelfare();
         generalWelfare.setName(welfareForm.getName());
-        generalWelfare.setDescribe(welfareForm.getDescribe());
-        generalWelfare.setPrice(welfareForm.getPrice());
+        generalWelfare.setText(welfareForm.getText());
+        generalWelfare.setPricee(welfareForm.getPrice());
         generalWelfareService.saveOrUpdate(generalWelfare);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
@@ -70,7 +70,7 @@ public class WelfareController {
     public ResponseEntity<Void> update(@PathVariable Long id, @ModelAttribute WelfareForm welfareForm){
         Welfare phucLoi = welfareService.findById(id).get();
         phucLoi.setName(welfareForm.getName());
-        phucLoi.setDescribe(welfareForm.getDescribe());
+        phucLoi.setText(welfareForm.getText());
         phucLoi.setPrice(welfareForm.getPrice());
         welfareService.update(id, phucLoi);
         return new ResponseEntity<Void>(HttpStatus.OK);
@@ -79,8 +79,7 @@ public class WelfareController {
     public ResponseEntity<Void> update2(@PathVariable Long id, @ModelAttribute WelfareForm welfareForm){
         GeneralWelfare generalWelfare = generalWelfareService.findById(id).get();
         generalWelfare.setName(welfareForm.getName());
-        generalWelfare.setDescribe(welfareForm.getDescribe());
-        generalWelfare.setPrice(welfareForm.getPrice());
+        generalWelfare.setPricee(welfareForm.getPrice());
         generalWelfareService.update(id, generalWelfare);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
