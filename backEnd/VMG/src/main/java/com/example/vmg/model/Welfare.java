@@ -20,9 +20,17 @@ public class Welfare implements Serializable {
     private String describe;
     private BigDecimal price;
     private Integer status;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "welfare")
+    private List<WelfareStaff> welfareStaffList;
+
     @JsonIgnore
     @OneToMany(mappedBy = "welfare")
     private List<RegisterWelfare> registerWelfareList;
+
+
+
 
 
 }
