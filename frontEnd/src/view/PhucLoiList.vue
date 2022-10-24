@@ -30,9 +30,9 @@
                 <tbody>
                   <tr v-for="(item, index) in list" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.ten }}</td>
-                    <td>{{ item.moTa }}</td>
-                    <td>{{ item.giaTri }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.text }}</td>
+                    <td>{{ item.price }}</td>
                     <td>
                       <span class="icon-edit" @click="showEditForm(item)">
                         <i class="fa fa-edit"></i> </span

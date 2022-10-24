@@ -1,5 +1,6 @@
 package com.example.vmg.controller;
 
+import com.example.vmg.dto.respose.MessageResponse;
 import com.example.vmg.model.RegisterWelfare;
 
 import com.example.vmg.form.WelfareForm;
@@ -11,6 +12,7 @@ import com.example.vmg.service.WelfareService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +26,7 @@ public class WelfareController {
     @Autowired private WelfareService welfareService;
     @Autowired private GeneralWelfareService generalWelfareService;
     @Autowired private RegisterWelfareService registerWelfareService;
-
+    //@PreAuthorize("hasRole('ROLE_MODERATOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @GetMapping("/welfares")
     public List<Welfare> getlist(){
         return welfareService.getList();
@@ -39,17 +41,19 @@ public class WelfareController {
         phucLoi.setName(welfareForm.getName());
         phucLoi.setText(welfareForm.getText());
         phucLoi.setPrice(welfareForm.getPrice());
+        phucLoi.setStatus(0);
         welfareService.saveOrUpdate(phucLoi);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+            return new ResponseEntity<Void>(HttpStatus.OK);
     }
     @PostMapping("/general-welfane")
-    public ResponseEntity<Void> addPhucLoiBiDong(@ModelAttribute WelfareForm welfareForm){
+    public ResponseEntity<?> addPhucLoiBiDong(@ModelAttribute WelfareForm welfareForm){
         GeneralWelfare generalWelfare = new GeneralWelfare();
         generalWelfare.setName(welfareForm.getName());
         generalWelfare.setText(welfareForm.getText());
-        generalWelfare.setPricee(welfareForm.getPrice());
-        generalWelfareService.saveOrUpdate(generalWelfare);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        generalWelfare.setPrice(welfareForm.getPrice());
+        generalWelfare.setStatus(0);
+        generalWelfareService.save(generalWelfare);
+        return ResponseEntity.ok(new MessageResponse("create welfane successfully!"));
     }
 
 
@@ -79,7 +83,7 @@ public class WelfareController {
     public ResponseEntity<Void> update2(@PathVariable Long id, @ModelAttribute WelfareForm welfareForm){
         GeneralWelfare generalWelfare = generalWelfareService.findById(id).get();
         generalWelfare.setName(welfareForm.getName());
-        generalWelfare.setPricee(welfareForm.getPrice());
+        generalWelfare.setPrice(welfareForm.getPrice());
         generalWelfareService.update(id, generalWelfare);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

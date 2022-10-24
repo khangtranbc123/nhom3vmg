@@ -15,4 +15,6 @@ public interface StaffRepository extends JpaRepository<Staff,Long> {
     @Transactional
     @Query("update Staff p set p.welfareMoney = :number where p.id in(:longs)")
     void updateMoney(BigDecimal number, List<Long> longs);
+
+    Staff findByEmail(String email);
 }
