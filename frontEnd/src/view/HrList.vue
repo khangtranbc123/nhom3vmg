@@ -23,14 +23,15 @@
                   </div>
                   <div class="mb-3">
                     <label class="form-label">Email</label>
-                    <input v-model="staff.email" type="email" class="form-control" placeholder="Mời bạn nhập email nhân viên">
+                    <input name="email" v-model="staff.email" type="email" class="form-control" placeholder="Mời bạn nhập email nhân viên">
                   </div>
                   <div class="mb-3">
                     <label class="form-label">Ngày sinh</label>
-                    <input v-model="staff.date" id="date" name="date"
-                    type="date" class="form-control" 
-                    placeholder="Mời bạn chọn ngày sinh nhân viên">
+                    <input v-model="   staff.date" id="date" name="date"
+                    type="text" class="form-control" 
+                    placeholder="dd/mm/yyyy">
                   </div>
+      
                   <div class="mb-3">
                     <label class="form-label">Số tiền phúc lợi được hưởng</label>
                     <input v-model="staff.welfareMoney" id="welfareMoney" name="welfareMoney"
@@ -145,56 +146,13 @@
       </div>
       <div class="hr-image col-3"></div>
     </div>
-    <!-- <el-dialog
-      title="Thông tin cá nhân"
-      :visible.sync="showDialogAdd"
-      width="900px"
-      label-width="100px"
-      top="5vh"
-    >
-      <el-form ref="form" :model="form" label-width="120px">
-          <el-form-item label="Tên">
-            <el-input v-model="form.hoTen"></el-input>
-          </el-form-item>
 
-          <el-form-item label="Code">
-            <el-input type="text" v-model="form.maNV"></el-input>
-          </el-form-item>
-          <el-form-item label="Phòng">
-            <el-select v-model="form.phongBan.ten" placeholder="Chọn phòng">
-                    <el-option
-                      v-for="item in departments"
-                      :key="item.id"
-                      :value="item.id"
-                    >
-                    {{item.ten}}
-                    </el-option>
-                  </el-select>
-          </el-form-item>
-          <el-form-item label="Email">
-            <el-input type="text" v-model="form.email"></el-input>
-          </el-form-item>
-          <el-form-item label="Trạng Thái">
-          <el-select v-model="form.trangThai" placeholder="Chọn trạng thái">
-            <el-option label="1.Đang làm" value="1"></el-option>
-            <el-option label="2.Đã nghỉ" value="2"></el-option>
-          </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="addStaff(form)">Cập nhật</el-button>
-          </el-form-item>
-    </el-form>
-    </el-dialog> -->
   </div>
 </template>
 
 <script>
-// import StaffApi from "@/service/hrService";
+import moment from "moment"
 import StaffService from "@/service/hrService";
-// import { response } from "express";
-// import loadingVue from '../../../element/packages/loading/src/loading.vue';
-// import { response } from "express";
-// let staffApi = new StaffApi();
 export default {
   name: "HrList",
   data () {
@@ -203,6 +161,7 @@ export default {
       welfares: [],
       gerenalWelfares: [],
       departments: [],
+      date: '',
       staffId: '',
       staff: {
         code: '',
@@ -218,6 +177,9 @@ export default {
       status: true,
     };
   },
+  // created(){
+  //   this.staff.date = this.formatDate(this.staff.date)
+  // },
   methods: {
     showDialog() {
       this.showDialogAdd = true;
@@ -230,6 +192,12 @@ export default {
         this.isShow = true;
       }, 100);
     },
+    formatDate(value){
+      if (value) {
+        return moment(String(value)).format('DD/MM/YYYY')
+      }
+    },
+
  
     getAll () {
       StaffService.getAll()
@@ -262,9 +230,13 @@ export default {
     },
 
     create () {
+      this.staff.date = this.formatDate(this.staff.date)
+      console.log(this.staff.date)
       let form = document.querySelector('#form-staff')
-      console.log(form)
-      StaffService.createStaff(form)
+      let formdata = new FormData(form);
+      // formdata.append("department.id" , this.staff.department)
+      console.log(formdata)
+      StaffService.createStaff(formdata)
         .then(response => {
           console.log(response.data)
         }).catch(e => {
@@ -296,6 +268,7 @@ export default {
   },
  
   mounted () {
+    // this.staff.date = this.formatDate(this.staff.date)
     this.getAll();
     this.getDepartments()
   }

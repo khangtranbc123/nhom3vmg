@@ -26,8 +26,7 @@ class StaffService {
         return await axios.put('http://localhost:8083/api/staff/' + id, object)
     }
     async createStaff(staff) {
-        let staffForm = new FormData(staff)
-        return await axios.post('http://localhost:8083/api/staff', staffForm)//day khoan
+        return await axios.post('http://localhost:8083/api/staff', staff)
     }
     async getRegisterWelfare() {
         return await axios.get('http://localhost:8083/api/registers')

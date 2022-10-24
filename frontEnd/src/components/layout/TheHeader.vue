@@ -32,8 +32,13 @@
           </defs>
         </svg>
       </div>
-      <div class="header-right">
+      <div class="header-right" >
         <div class="header-right__item">
+            <i class="el-icon-s-home"></i>
+            <button class="btn nav-link">Kiểm tra thông tin</button>
+        </div>
+        <div class="header-right__item">
+          <i class="el-icon-s-order"></i>
           <el-dropdown>
           <span class="el-dropdown-link" style="cursor: pointer">
             Quản Lí<i class="el-icon-arrow-down el-icon--right"></i>
@@ -44,50 +49,45 @@
                   </el-dropdown-menu>
           </el-dropdown>
         </div>
-        <div>
+        <div class="header-right__item">
           <el-badge :value="100" :max="99" class="item" style="margin-right: 10px; margin-left: 5px ;">
-           
-              <router-link style="text-decoration: none;color:black;cursor:pointer"  to="/xetduyet">Xét duyệt đăng ký phúc lợi</router-link>
+              <i class="el-icon-message-solid"></i>
+              <router-link style="text-decoration: none;color:black;cursor:pointer"  to="/xetduyet">Xét duyệt </router-link>
            
           </el-badge>
         </div>
-        <div class="header-right__item">
+
+        <div class="header-right__item" v-if="!loggedIn">
           <div class="header-right__item--text">
+            <i class="el-icon-s-custom"></i>
             <router-link to="/login" style="text-decoration: none;color:black;cursor:pointer">Login</router-link>
           </div>
-         
-      
-          <div class="header-right__item--icon"></div>
         </div>
-        <div class="header-right__item">
-          <div class="header-right__item--text">
-            <div class="user-image"></div>
-          </div>
-          <div class="header-right__item--icon">
-            <svg
-              width="18"
-              height="11"
-              viewBox="0 0 18 11"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M16 2L9 9L2 2"
-                stroke="black"
-                stroke-width="3"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </div>
+
+        <div class="header-right__item" v-if="loggedIn" >
+            <i class="el-icon-s-custom"></i>
+            <button class="btn nav-link" @click="logOut">logOut</button>
         </div>
       </div>
     </div>
 </template>
   
 <script>
+import login from '@/view/PhucLoiLogin.vue'
 export default{
-
+  name: 'app',
+  components: login,
+  computed: {
+    loggedIn () {
+      return this.$store.state.auth.status.loggedIn
+    }
+  },
+  methods: {
+    logOut() {
+      this.$store.dispatch('auth/logout')
+      this.$router.push('/login')
+    }
+  }
   }
 </script>
   
@@ -115,7 +115,7 @@ export default{
     align-items: center;
   }
   .header-right__item {
-    margin-right: 23px;
+    margin: 0px 35px 0px 35px;
     display: flex;
     align-items: center;
   }
