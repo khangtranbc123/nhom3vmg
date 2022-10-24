@@ -216,14 +216,6 @@ export default {
         phongBan: {},
         email: ''
       },
-      editForm: {
-        hoTen: '',
-        maNV: '',
-        ngaySinh: new Date(),
-        trangThai: '',
-        phongBan: {},
-        email: ''
-      },
       positions: [
         {
           id:1,

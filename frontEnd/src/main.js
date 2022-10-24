@@ -6,9 +6,11 @@ import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import router from './router'
 import store from './store'
+import VueSessionStorage from 'vue-sessionstorage'
 Vue.config.productionTip = false;
 
-Vue.use(components);
+Vue.use(components); 
+Vue.use(VueSessionStorage)
 
 Vue.use(ElementUI);
 

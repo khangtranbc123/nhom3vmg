@@ -19,6 +19,12 @@ public class WelfareStaffEntity {
     @Column(name = "id_welfare")
     private Long idWelfare;
 
+    public WelfareStaffEntity(Integer status, Long idWelfare, Long idStaff) {
+        this.status = status;
+        this.idStaff = idStaff;
+        this.idWelfare = idWelfare;
+    }
+
     public long getId() {
         return id;
     }
