@@ -33,7 +33,7 @@ const routes = [
     {
       path: "/xetduyet",
       name: "xetduyet",
-      component: () => import("../view/RegisterWelfare.vue"),
+      component: () => import("../view/HrAccpetWelfare.vue"),
     },
     {
         path: '/logout',

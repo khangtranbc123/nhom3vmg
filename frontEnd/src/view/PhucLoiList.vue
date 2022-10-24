@@ -3,18 +3,22 @@
     <div class="pl-content">
       <div class="pl-title">DANH SÁCH PHÚC LỢI</div>
       <div class="pl-ele">
-        <div class="pl-table">
-          <div class="pl-select">
-            <el-select v-model="value" placeholder="Chọn Phòng Ban">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
+        <div class="pl-button">
+          <el-button round class="pl-button__detail" @click="showAddForm"
+            >Thêm mới</el-button
+          >
+        </div>
+        <div class="pl-select">
+            <el-select v-model="value" placeholder="Loại phúc lợi">
+              <el-option>
+                Cá nhân hóa
+              </el-option>
+              <el-option>
+                Chung
               </el-option>
             </el-select>
           </div>
+        <div class="pl-table">
           <div class="pl-table__content">
             <form id="form" label-width="120px">
               <table>
@@ -28,6 +32,47 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <tr v-if="isShowAdd">
+                    <td></td>
+                    <td>
+                      <input
+                        type="text"
+                        v-model="edit.name"
+                        id="name"
+                        name="name"
+                        placeholder="Nhập tên phúc lợi"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        v-model="edit.text"
+                        id="text"
+                        name="text"
+                        placeholder="Nhập mô tả"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        v-model="edit.price"
+                        id="price"
+                        name="price"
+                        placeholder="Nhập tổng tiền"
+                      />
+                    </td>
+                    <td>
+                      <el-button round class="pl-button__detail" @click="Add()"
+                        >Xác nhận</el-button
+                      >
+                      <el-button
+                        round
+                        class="pl-button__detail"
+                        @click="Cancel()"
+                        >Hủy</el-button
+                      >
+                    </td>
+                  </tr>
                   <tr v-for="(item, index) in list" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name }}</td>
@@ -45,56 +90,11 @@
                     </td>
                   </tr>
 
-                  <tr v-if="isShowAdd">
-                    <td></td>
-                    <td>
-                      <input
-                        type="text"
-                        v-model="edit.ten"
-                        id="ten"
-                        name="ten"
-                        placeholder="Nhập tên phúc lợi"
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        v-model="edit.moTa"
-                        id="moTa"
-                        name="moTa"
-                        placeholder="Nhập mô tả"
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        v-model="edit.giaTri"
-                        id="giaTri"
-                        name="giaTri"
-                        placeholder="Nhập tổng tiền"
-                      />
-                    </td>
-                    <td>
-                      <el-button round class="pl-button__detail" @click="Add()"
-                        >Xác nhận</el-button
-                      >
-                      <el-button
-                        round
-                        class="pl-button__detail"
-                        @click="Cancel()"
-                        >Hủy</el-button
-                      >
-                    </td>
-                  </tr>
+                  
                 </tbody>
               </table>
             </form>
           </div>
-        </div>
-        <div class="pl-button">
-          <el-button round class="pl-button__detail" @click="showAddForm"
-            >Thêm mới</el-button
-          >
         </div>
       </div>
     </div>
@@ -114,17 +114,17 @@
         <el-row>
           <el-col :span="6">
             <el-form-item label="Tên phúc lợi" prop="name">
-              <el-input v-model="edit.ten"></el-input>
+              <el-input v-model="edit.name"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6" :offset="2">
             <el-form-item label="Thành tiền" prop="address">
-              <el-input type="number" v-model="edit.giaTri"></el-input>
+              <el-input type="number" v-model="edit.price"></el-input>
             </el-form-item>
           </el-col>
           <el-col>
             <el-form-item label="Mô tả" prop="code">
-              <el-input type="textarea" v-model="edit.moTa"></el-input>
+              <el-input type="textarea" v-model="edit.text"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -146,25 +146,15 @@ export default {
   name: "PhucLoiList",
   data() {
     return {
-      options: [
-        {
-          value: "PTPM",
-          lable: "Phong Phat Trien PM",
-        },
-        {
-          value: "NS",
-          lable: "Phong Nhan Su",
-        },
-      ],
       value: "",
       isShowEdit: false,
       isShowDialog: false,
       isShowAdd: false,
       edit: {
         id: "",
-        ten: "",
-        moTa: "",
-        giaTri: "",
+        name: "",
+        text: "",
+        price: "",
       },
       list: [],
     };
@@ -176,7 +166,7 @@ export default {
     },
     Add() {
       let isValidate = true;
-      if (!(this.edit.ten && this.edit.moTa && this.edit.giaTri)) {
+      if (!(this.edit.name && this.edit.text && this.edit.price)) {
         this.$alert(
           "Thông tin đầu vào không hợp lệ vui lòng nhập đủ thông tin!",
           "Thông tin không hợp lệ",
@@ -219,7 +209,7 @@ export default {
     },
     editWel(edit) {
       let isValidate = true;
-      if (!(edit.ten && edit.moTa && edit.giaTri)) {
+      if (!(edit.name && edit.text && edit.price)) {
         this.$alert(
           "Thông tin đầu vào không hợp lệ vui lòng nhập đủ thông tin!",
           "Thông tin không hợp lệ",
