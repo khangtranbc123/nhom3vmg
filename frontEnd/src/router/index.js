@@ -21,6 +21,16 @@ const routes = [
         component: () => import("@/view/HrList.vue"),
     },
     {
+      path: "/register_welfare",
+      name: "RegisterWelfare",
+      component: () => import("@/view/RegisterWelfare.vue"),
+    },
+    {
+      path: "/check",
+      name: "MyCheckBox",
+      component: () => import("@/view/MyCheckBox.vue"),
+    },
+    {
       path: "/xetduyet",
       name: "xetduyet",
       component: () => import("../view/RegisterWelfare.vue"),

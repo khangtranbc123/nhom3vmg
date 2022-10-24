@@ -19,5 +19,8 @@ class WelfareApi {
     async createWelfare(object) {
         return await axios.post('http://localhost:8083/api/welfare', object)
     }
+    async registerWelfare(object) {
+        return await axios.post('http://localhost:8083/api/regis_welfare', object)
+    }
 }
 export default WelfareApi;

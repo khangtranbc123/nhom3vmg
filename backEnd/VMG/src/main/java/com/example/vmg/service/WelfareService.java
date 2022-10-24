@@ -34,5 +34,6 @@ public class WelfareService {
     public void delete(Long id) {
         welfareRepository.deleteById(id);
     }
+//    public void registerWelfare(Long id_welfare,Long id_user){welfareRepository.saveRegisterWelfare(id_welfare,id_user);}
 
 }

@@ -48,4 +48,8 @@ public class JwtProvider {
         return userName;
     }
 
+    public Long getIdFromToken(String token){
+        return Long.valueOf(Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getId());
+    }
+
 }

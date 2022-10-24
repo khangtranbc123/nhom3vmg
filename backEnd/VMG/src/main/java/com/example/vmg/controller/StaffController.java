@@ -2,14 +2,19 @@ package com.example.vmg.controller;
 
 import com.example.vmg.dto.respose.MessageResponse;
 import com.example.vmg.form.StaffForm;
-import com.example.vmg.model.*;
+import com.example.vmg.model.ERole;
+import com.example.vmg.model.Role;
+import com.example.vmg.model.Staff;
+import com.example.vmg.model.User;
 import com.example.vmg.respository.StaffRepository;
-import com.example.vmg.security.jwt.JwtProvider;
-import com.example.vmg.service.*;
+import com.example.vmg.service.RoleServiceImpl;
+import com.example.vmg.service.StaffService;
+import com.example.vmg.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
+import com.example.vmg.model.*;
+import com.example.vmg.service.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,12 +31,16 @@ import java.util.stream.Collectors;
 public class StaffController {
     @Autowired private StaffService staffService;
 
+
+    @Autowired private StaffRepository staffRepository;
+
     @Autowired
     private UserServiceImpl userService;
     @Autowired
     private RoleServiceImpl roleService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Autowired
     private RegisterWelfareService registerWelfareService;
     @Autowired
@@ -42,7 +51,7 @@ public class StaffController {
         return staffService.getList();
     }
     @PostMapping("/staff")
-    public ResponseEntity<?> addNhanVien( @ModelAttribute StaffForm staffForm){
+    public ResponseEntity<?> addNhanVien(@Valid @ModelAttribute StaffForm staffForm){
         try {
             Staff staff = new Staff();
             staff.setCode(staffForm.getCode());
@@ -75,6 +84,7 @@ public class StaffController {
             return ResponseEntity.ok(new RuntimeException("Erorr!"));
         }
     }
+
 
     @DeleteMapping("/staff/{id}")
     public ResponseEntity<Void> deleteStaff(@PathVariable Long id){
