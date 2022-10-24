@@ -4,17 +4,6 @@
       <div class="pl-title">DANH SÁCH PHÚC LỢI</div>
       <div class="pl-ele">
         <div class="pl-table">
-          <!-- <div class="pl-select">
-              <el-select v-model="value" placeholder="Chọn Phòng Ban">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
-                </el-option>
-              </el-select>
-            </div> -->
           <div class="pl-table__content">
             <form id="form" label-width="120px">
               <table>
@@ -43,63 +32,11 @@
                     <td>{{ item.name }}</td>
                     <td>{{ item.text }}</td>
                     <td>{{ item.price }}</td>
-
-                    <!-- <td>
-                        <span class="icon-edit" @click="showEditForm(item)">
-                          <i class="fa fa-edit"></i> </span
-                        >&nbsp;<span
-                          class="icon-delete"
-                          @click="showDeleteDialog(item.id)"
-                        >
-                          <i class="fa fa-trash"></i>
-                        </span>
-                      </td> -->
                   </tr>
 
                   {{
                     4000 - totalMoney
                   }}
-                  <tr v-if="isShowAdd">
-                    <td></td>
-                    <td>
-                      <input
-                        type="text"
-                        v-model="edit.ten"
-                        id="ten"
-                        name="ten"
-                        placeholder="Nhập tên phúc lợi"
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        v-model="edit.moTa"
-                        id="moTa"
-                        name="moTa"
-                        placeholder="Nhập mô tả"
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        v-model="edit.giaTri"
-                        id="giaTri"
-                        name="giaTri"
-                        placeholder="Nhập tổng tiền"
-                      />
-                    </td>
-                    <td>
-                      <el-button round class="pl-button__detail" @click="Add()"
-                        >Xác nhận</el-button
-                      >
-                      <el-button
-                        round
-                        class="pl-button__detail"
-                        @click="Cancel()"
-                        >Hủy</el-button
-                      >
-                    </td>
-                  </tr>
                 </tbody>
               </table>
             </form>
@@ -113,43 +50,6 @@
         </div>
       </div>
     </div>
-    <el-dialog
-      title="Thông tin phúc lợi"
-      :visible.sync="isShowEdit"
-      width="600px"
-      label-width="100px"
-      top="5vh"
-    >
-      <el-form
-        :model="edit"
-        ref="edit"
-        label-width="120px"
-        label-position="top"
-      >
-        <el-row>
-          <el-col :span="6">
-            <el-form-item label="Tên phúc lợi" prop="name">
-              <el-input v-model="edit.ten"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6" :offset="2">
-            <el-form-item label="Thành tiền" prop="address">
-              <el-input type="number" v-model="edit.giaTri"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col>
-            <el-form-item label="Mô tả" prop="code">
-              <el-input type="textarea" v-model="edit.moTa"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button class="hr-detail__button" round @click="editWel(edit)"
-          >Cập nhật
-        </el-button>
-      </span>
-    </el-dialog>
     <pre>{{userName}}</pre>
   </div>
 </template>
@@ -162,28 +62,7 @@ export default {
   name: "PhucLoiList",
   data() {
     return {
-      checkedNames: [],
-      options: [
-        {
-          value: "PTPM",
-          lable: "Phong Phat Trien PM",
-        },
-        {
-          value: "NS",
-          lable: "Phong Nhan Su",
-        },
-      ],
       selected: [],
-      value: "",
-      isShowEdit: false,
-      isShowDialog: false,
-      isShowAdd: false,
-      edit: {
-        id: "",
-        ten: "",
-        moTa: "",
-        giaTri: "",
-      },
       list: [],
       userName: "",
     };
@@ -205,80 +84,24 @@ export default {
   methods: {
     disableHandler(item) {
       return (
-        this.totalMoney + item.price > 3000 && !this.selected.includes(item)
+        this.totalMoney + item.price > 4000 && !this.selected.includes(item)
       );
     },
-    showAddForm() {
-      this.edit = {};
-      this.isShowAdd = true;
-    },
-    Add() {
-      let isValidate = true;
-      if (!(this.edit.ten && this.edit.moTa && this.edit.giaTri)) {
-        this.$alert(
-          "Thông tin đầu vào không hợp lệ vui lòng nhập đủ thông tin!",
-          "Thông tin không hợp lệ",
-          {
-            confirmButtonText: "OK",
-            callback: () => {},
-          }
-        );
-        isValidate = false;
-      }
-      if (isValidate) {
-        let form = document.querySelector("#form");
-        console.log(form);
-        welfareApi.createWelfare(form).then((res) => {
-          welfareApi.getAllWelfare().then((res) => {
-            // self.isLoaded = true;
-            this.list = res.data;
-          });
-        });
-        this.isShowAdd = false;
-      }
-    },
-    Cancel() {
-      this.isShowAdd = false;
-    },
-    showEditForm(item) {
-      this.isShowEdit = false;
-      setTimeout(() => {
-        this.edit = item;
-        this.isShowEdit = true;
-      }, 100);
-    },
-    showDeleteDialog(item) {
-      welfareApi.deleteWelfare(item).then((res) => {
-        if (res.status == 200) {
-          const index = this.list.findIndex((a) => a.id == item.id);
-          this.list.splice(index, 1);
-        }
-      });
-    },
-    // editWel(edit) {
-    //   let isValidate = true;
-    //   if (!(edit.ten && edit.moTa && edit.giaTri)) {
-    //     this.$alert(
-    //       "Thông tin đầu vào không hợp lệ vui lòng nhập đủ thông tin!",
-    //       "Thông tin không hợp lệ",
-    //       {
-    //         confirmButtonText: "OK",
-    //         callback: () => {},
-    //       }
-    //     );
-    //     isValidate = false;
-    //   }
-    //   if (isValidate) {
-    //     const qs = require("qs");
-    //     welfareApi.updateWelfare(edit.id, qs.stringify(edit));
-    //     this.isShowEdit = false;
-    //   }
-    // },
     async registerWelfares() {
       let object = {
-        id: 1,
-        list: this.selected,
+        id: await (await welfareApi.findID(this.userName)).data,
+        list: [],
       };
+      let item = "";
+      for(item in this.selected){
+        console.log('ID')
+        console.log(item)
+        object.list.push(parseInt(item) + 1)
+      }
+      console.log('object')
+      console.log(object.list)
+      // console.log(await (await welfareApi.findID(this.userName)).data)
+      // console.log(object)
       const res = await welfareApi.registerWelfare(object);
       console.log((res.status = 201 ? "Thêm thành công" : "Thêm thất bại"));
     },
@@ -436,3 +259,5 @@ textarea {
   font-weight: 700;
   color: #f00 !important;
 }
+</style>
+  
