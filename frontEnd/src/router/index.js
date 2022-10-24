@@ -7,8 +7,8 @@ Vue.use(VueRouter);
 const routes = [
     {
         path: "/login",
-        name: "PhucLoiLogin",
-        component: () => import("@/view/PhucLoiLogin.vue"),
+        name: "Login",
+        component: () => import("../view/PhucLoiLogin.vue"),
     },
     {
         path: "/",
@@ -31,6 +31,11 @@ const routes = [
       component: () => import("@/view/MyCheckBox.vue"),
     },
     {
+      path: "/xetduyet",
+      name: "xetduyet",
+      component: () => import("../view/RegisterWelfare.vue"),
+  },
+    {
         path: '/logout',
         name: 'logout',
         beforeEnter (to, from, next) {
@@ -43,7 +48,7 @@ const routes = [
             console.log(reason)
           })
         }
-      }
+    }
 ];
 
 const router = new VueRouter({

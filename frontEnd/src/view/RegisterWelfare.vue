@@ -436,5 +436,3 @@ textarea {
   font-weight: 700;
   color: #f00 !important;
 }
-</style>
-  

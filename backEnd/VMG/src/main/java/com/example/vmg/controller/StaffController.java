@@ -13,13 +13,17 @@ import com.example.vmg.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import com.example.vmg.model.*;
+import com.example.vmg.service.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -27,7 +31,9 @@ import java.util.Set;
 public class StaffController {
     @Autowired private StaffService staffService;
 
+
     @Autowired private StaffRepository staffRepository;
+
     @Autowired
     private UserServiceImpl userService;
     @Autowired
@@ -35,7 +41,11 @@ public class StaffController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
+    @Autowired
+    private RegisterWelfareService registerWelfareService;
+    @Autowired
+    private WelfareStaffService welfareStaffService;
+    @Autowired private WelfareService welfareService;
     @GetMapping("/staffs")
     public List<Staff> getListNhanVien(){
         return staffService.getList();
@@ -82,6 +92,47 @@ public class StaffController {
         staffService.delete(id);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
+    @PutMapping("/staff/update-money")
+    public ResponseEntity<?> updateMoney(@RequestParam("ids") List<Long> ids, @RequestBody BigDecimal money){
+        staffService.updateMoney(money, ids);
+        String.join(",", ids.stream()
+                .map(value ->  Long.toString(value)).collect(Collectors.toList()));
+        return ResponseEntity.ok(new MessageResponse("update money staff successfully!"));
+
+    }
+
+    @GetMapping("/staff-show/{id}")
+    public ResponseEntity <List<WelfareStaff>> showWelfare(@PathVariable("id") Long id){
+
+        return new ResponseEntity<List<WelfareStaff>>(welfareStaffService.getbystaff(id), HttpStatus.OK);
+    }
+    @GetMapping("/registers")
+    public ResponseEntity <List<RegisterWelfare>> showRegisterWelfare(){
+        return new ResponseEntity<List<RegisterWelfare>>(registerWelfareService.getByStatus(), HttpStatus.OK);
+    }
+    @PutMapping("/register/{id}")
+    public ResponseEntity <?> successRegister(@PathVariable Long id){
+        RegisterWelfare registerWelfare = registerWelfareService.findById(id).get();
+        Staff staff = staffService.getByEmail(registerWelfare.getEmail());
+
+        WelfareStaff welfareStaff = new WelfareStaff();
+        welfareStaff.setStaff(staff);
+        welfareStaff.setWelfare(registerWelfare.getWelfare());
+        welfareStaff.setStatus(0);
+        welfareStaffService.save(welfareStaff);
+
+        registerWelfare.setStatus(1);
+        registerWelfareService.update(id, registerWelfare);
+        return ResponseEntity.ok(new MessageResponse("successfully!"));
+    }
+    @PutMapping("/register-delete/{id}")
+    public ResponseEntity <?> DeleteRegister(@PathVariable Long id){
+        RegisterWelfare registerWelfare = registerWelfareService.findById(id).get();
+        registerWelfare.setStatus(2);
+        registerWelfareService.update(id, registerWelfare);
+        return ResponseEntity.ok(new MessageResponse("successfully!"));
+    }
+
 
 //    @PutMapping("/update/{id}")
 //    public ResponseEntity<Void> update2(@PathVariable Long id, @ModelAttribute NhanVienForm nhanVienForm){
