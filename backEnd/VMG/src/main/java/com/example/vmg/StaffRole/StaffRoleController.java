@@ -5,7 +5,9 @@ import com.example.vmg.model.Welfare;
 import com.example.vmg.model.WelfareStaffEntity;
 import com.example.vmg.respository.WelfareRepository;
 import com.example.vmg.respository.WelfareStaffEntityRepository;
+import com.example.vmg.security.jwt.JwtProvider;
 import com.example.vmg.service.AddWelfare;
+import com.example.vmg.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class StaffRoleController {
     @Autowired
-    private WelfareRepository welfareRepository;
+    private StaffService staffService;
     @Autowired
     private WelfareStaffEntityRepository welfareStaffEntityRepository;
     @PostMapping("/regis_welfare")
@@ -32,4 +34,9 @@ public class StaffRoleController {
         }
 //        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    @GetMapping("/find_id/{username}")
+    public Long getIdOfAccount(@PathVariable String username){
+        return staffService.getByEmail(username).getId();
+    }
+
 }

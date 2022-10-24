@@ -34,7 +34,7 @@ const routes = [
       path: "/xetduyet",
       name: "xetduyet",
       component: () => import("../view/RegisterWelfare.vue"),
-  },
+    },
     {
         path: '/logout',
         name: 'logout',

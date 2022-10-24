@@ -34,6 +34,14 @@
       </div>
       <div class="header-right">
         <div class="header-right__item">
+          <div class="header-right__item--text">
+            <router-link to="/register_welfare" style="text-decoration: none;color:black;cursor:pointer">Đăng Kí Phúc Lợi</router-link>
+          </div>
+         
+      
+          <div class="header-right__item--icon"></div>
+        </div>
+        <div class="header-right__item">
           <el-dropdown>
           <span class="el-dropdown-link" style="cursor: pointer">
             Quản Lí<i class="el-icon-arrow-down el-icon--right"></i>

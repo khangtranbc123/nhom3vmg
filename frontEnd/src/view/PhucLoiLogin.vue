@@ -1,32 +1,34 @@
 <template>
   <div class="login">
     <div class="login-title">
-      <h1>Quản lý phúc lợi của bạn</h1>
+      <h1>Quản lý phúc lợi</h1>
     </div>
     <div class="login-content">
       <form name="form" @submit.prevent="handleLogin">
         <div class="form-group">
-          <label for="username">Username </label>
           <input
               v-model="user.userName"
-              type="text"
+              type="email"
               class="form-control"
               name="username"
+              placeholder="Nhập email"
+              required
           />
         </div>
         <br>
         <div class="form-group">
-          <label for="password">Password </label>
           <input
               v-model="user.passWord"
               type="password"
               class="form-control"
               name="password"
+              placeholder="Nhập password"
+              required
           />
         </div>
         <br>
         <div class="form-group" id="bt">
-          <button class="btn btn-primary btn-block" :disabled="loading">
+          <button class="btn btn-danger btn-block" :disabled="loading">
             <span v-show="loading" class="spinner-border spinner-border-sm"></span>
             <span>Login</span>
           </button>
@@ -118,6 +120,7 @@ export default {
   box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.25);
   margin-left:400px;
   margin-top:80px;
+  background-color:pink;
 }
 
 .login-title {
@@ -169,6 +172,8 @@ input{
   outline: none;
   border:none;
   border-bottom:1px solid black;
+  padding-top:15px !important;
+  padding-bottom:15px !important;
 }
 .btn{
   padding:1px 10px 10px 10px;
@@ -178,6 +183,9 @@ input{
   cursor: pointer;
 
 
+}
+.form-group{
+  margin-left:100px;
 }
 
 </style>
