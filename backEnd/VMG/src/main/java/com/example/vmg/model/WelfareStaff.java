@@ -6,14 +6,17 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Getter
-@Setter
+
 @SuppressWarnings("serial")
 @Entity
+@Getter
+@Setter
 public class WelfareStaff implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
     private Integer status;
 
     @ManyToOne

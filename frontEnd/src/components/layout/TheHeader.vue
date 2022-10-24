@@ -35,14 +35,21 @@
       <div class="header-right">
         <div class="header-right__item">
           <el-dropdown>
-    <span class="el-dropdown-link" style="cursor: pointer">
-      Quản Lí<i class="el-icon-arrow-down el-icon--right"></i>
-    </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item><router-link to="/hr" style="text-decoration: none;color:black;cursor:pointer">Quản lí nhân viên</router-link></el-dropdown-item>
-              <el-dropdown-item><router-link to="/" style="text-decoration: none;color:black;cursor:pointer">Quản lí phúc lợi</router-link></el-dropdown-item>
-            </el-dropdown-menu>
+          <span class="el-dropdown-link" style="cursor: pointer">
+            Quản Lí<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item><router-link to="/hr" style="text-decoration: none;color:black;cursor:pointer width: 100%;">Quản lí nhân viên</router-link></el-dropdown-item>
+                    <el-dropdown-item><router-link to="/" style="text-decoration: none;color:black;cursor:pointer width: 100%;">Quản lí phúc lợi</router-link></el-dropdown-item>
+                  </el-dropdown-menu>
           </el-dropdown>
+        </div>
+        <div>
+          <el-badge :value="100" :max="99" class="item" style="margin-right: 10px; margin-left: 5px ;">
+           
+              <router-link style="text-decoration: none;color:black;cursor:pointer"  to="/xetduyet">Xét duyệt đăng ký phúc lợi</router-link>
+           
+          </el-badge>
         </div>
         <div class="header-right__item">
           <div class="header-right__item--text">
@@ -76,12 +83,10 @@
         </div>
       </div>
     </div>
-  </template>
+</template>
   
 <script>
-
 export default{
-
 
   }
 </script>

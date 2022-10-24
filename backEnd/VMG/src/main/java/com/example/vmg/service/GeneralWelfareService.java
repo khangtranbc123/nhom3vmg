@@ -25,7 +25,7 @@ public class GeneralWelfareService {
         return generalWelfareRepository.findById(id);
     }
 
-    public void saveOrUpdate(GeneralWelfare generalWelfare) {
+    public void save(GeneralWelfare generalWelfare) {
         generalWelfareRepository.save(generalWelfare);
     }
 

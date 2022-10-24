@@ -6,18 +6,18 @@ import axios from 'axios';
 class WelfareApi {
 
     async getAllWelfare() {
-        return await axios.get('http://localhost:8083/api/phucloi/list');
+        return await axios.get('http://localhost:8083/api/welfares');
     }
 
     async deleteWelfare(id) {
-        return await axios.delete('http://localhost:8083/api/phucloi/delete/' + id)
+        return await axios.delete('http://localhost:8083/api/welfare/' + id)
     }
     async updateWelfare(id, object) {
 
-        return await axios.put('http://localhost:8083/api/phucloi/update/' + id, object)
+        return await axios.put('http://localhost:8083/api/welfare/' + id, object)
     }
     async createWelfare(object) {
-        return await axios.post('http://localhost:8083/api/phucloi/create', object)
+        return await axios.post('http://localhost:8083/api/welfare', object)
     }
 }
 export default WelfareApi;

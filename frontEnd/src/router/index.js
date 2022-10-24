@@ -7,8 +7,8 @@ Vue.use(VueRouter);
 const routes = [
     {
         path: "/login",
-        name: "PhucLoiLogin",
-        component: () => import("@/view/PhucLoiLogin.vue"),
+        name: "Login",
+        component: () => import("../view/PhucLoiLogin.vue"),
     },
     {
         path: "/",
@@ -20,6 +20,11 @@ const routes = [
         name: "HrList",
         component: () => import("@/view/HrList.vue"),
     },
+    {
+      path: "/xetduyet",
+      name: "xetduyet",
+      component: () => import("../view/RegisterWelfare.vue"),
+  },
     {
         path: '/logout',
         name: 'logout',
@@ -33,7 +38,7 @@ const routes = [
             console.log(reason)
           })
         }
-      }
+    }
 ];
 
 const router = new VueRouter({

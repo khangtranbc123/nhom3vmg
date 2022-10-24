@@ -2,18 +2,60 @@
   <div class="hr-list">
     <div class="hr-content">
       <div class="hr-title">Quản lý nhân sự</div>
+      <br>
+      <el-popover style="margin-left: 35px;"
+                placement="right"
+                width="600"
+                trigger="click">
+                <h3 style="text-align: center; font: 1em sans-serif;">Thêm mới nhân viên</h3>
+                <form id="form-staff">
+                  <div class="mb-3">
+                    <label class="form-label">Mã nhân viên</label>
+                    <input v-model="staff.code" type="text" id="code" name="code"
+                     class="form-control" 
+                      placeholder="Mời bạn nhập mã nhân viên">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Họ tên nhân viên</label>
+                    <input v-model="staff.name" type="text" id="name" name="name"
+                    class="form-control"  
+                    placeholder="Mời bạn nhập họ tên nhân viên">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input v-model="staff.email" type="email" class="form-control" placeholder="Mời bạn nhập email nhân viên">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Ngày sinh</label>
+                    <input v-model="staff.date" id="date" name="date"
+                    type="date" class="form-control" 
+                    placeholder="Mời bạn chọn ngày sinh nhân viên">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Số tiền phúc lợi được hưởng</label>
+                    <input v-model="staff.welfareMoney" id="welfareMoney" name="welfareMoney"
+                    type="number"
+                     class="form-control" 
+                     placeholder="Mời bạn nhập số tiền nhân viên">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Phòng ban</label>
+                    <select v-model="staff.department" name="department" id="department">
+                      <option v-for="x in departments" :value="x.id" :key="x.id">
+                        {{x.name}}
+                      </option>
+                    </select>
+                  </div>
+                  <div>
+                    <button @click.prevent ="create" class="btn btn-success">Thêm</button>
+                  </div>
+                </form>
+                <el-button slot="reference" class="btn btn-danger">Thêm mới</el-button>
+      </el-popover>
+      <br>
       <div class="hr-info">
         <div class="hr-table">
           <div class="hr-selected">
-            <el-select v-model="value" placeholder="Select">
-              <!-- <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option> -->
-            </el-select>
           </div>
           <div class="hr-table__content">
             <table>
@@ -23,23 +65,23 @@
                   <th width="5%">STT</th>
                   <th width="200px">Họ và tên</th>
                   <th width="150px">Mã nhân viên</th>
-                  <th width="300px">Email</th>
-                  <th width="150px">Phòng ban</th>
+                  <th width="200px">Tổng tiền phúc lợi</th>
+                  <th width="300px">Phòng ban</th>
                   <th width="5%"></th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(item, index) in hrList" :key="index">
+                <tr v-for="(item, index) in staffs" :key="index">
                   <td>
                     <span class="icon-delete" @click="deleteStaff(item.id)">
                       <i class="fa fa-trash" aria-hidden="true"></i>
                     </span>
                   </td>
                   <td>{{ index + 1 }}</td>
-                  <td>{{ item.hoTen }}</td>
-                  <td>{{ item.maNV }}</td>
-                  <td>{{ item.email }}</td>
-                  <td>{{ item.phongBan.ten }}</td>
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.code }}</td>
+                  <td>{{ item.welfareMoney }} vnd</td>
+                  <td>{{ item.department.name }}</td>
                   <td>
                     <span class="icon-edit" @click="showInfo(item)">
                       <i class="fa fa-circle-info"></i>
@@ -49,16 +91,17 @@
               </tbody>
             </table>
           </div>
-          <div class="hr-function" >
+          <!-- modal them moi -->
+          <!-- <div class="hr-function" >
             <el-button round class="hr-detail__button" @click="showDialog"
             style="background-color: white;" >Thêm mới</el-button
             >
-          </div>
+          </div> -->
         </div>
         <transition name="slideLeft" v-if="isShow">
           <div class="hr-table__detail" ref="detail">
             <div class="hr-detail__header">
-              <span class="hr-detail__title">Thông tin cá nhân</span>
+              <span class="hr-detail__title">Thông tin nhân viên</span>
               <span class="hr-detail__close" @click="isShow = false">
                 <i class="fa fa-times" aria-hidden="true"></i>
               </span>
@@ -67,54 +110,9 @@
               <ul>
                 <li>
                   <span class="hr-detail__label"
-                    >Họ và tên: {{ form.hoTen }}</span
+                    >Mã nhân viên: {{ form.code }}</span
                   >
                 </li>
-                <li>
-                  <span class="hr-detail__label"
-                    >Email: {{ form.email }}</span
-                  >
-                </li>
-                <li>
-                  <span class="hr-detail__label"
-                    >Mã nhân viên: {{ form.maNV }}</span
-                  >
-</li>
-                <!--                  <li>-->
-                <!--                    <span class="hr-detail__label"-->
-                <!--                      >Giới tính: {{ hrInfo.gender }}</span-->
-                <!--                    >-->
-                <!--                  </li>-->
-                <!-- <li>
-                  <span class="hr-detail__label"
-                    >Ngày sinh: {{ form.ngaySinh }}</span
-                  >
-                </li> -->
-                <!-- <li>
-                  <span class="hr-detail__label"
-                    >Địa chỉ thường trú: {{ hrInfo.address }}</span
-                  >
-                </li> -->
-                <!-- <li>
-                  <span class="hr-detail__label"
-                    >Tình trạng hôn nhân: {{ hrInfo.maritalStatus }}</span
-                  >
-                </li> -->
-                <!-- <li>
-                  <span class="hr-detail__label"
-                    >Vị trí: {{ hrInfo.position }}</span
-                  >
-                </li> -->
-                <li>
-                  <span class="hr-detail__label"
-                    >Phòng ban: {{ form.phongBan.ten }}</span
-                  >
-                </li>
-                <!-- <li>
-                  <span class="hr-detail__label"
-                    >Sở thích: {{ hrInfo.hobby }}</span
-                  >
-                </li> -->
               </ul>
             </div>
             <div class="hr-detail__footer">
@@ -124,120 +122,105 @@
                 @click="showDialogAdd = true"
                 >Sửa thông tin
               </el-button>
-              <el-button round class="hr-detail__button"
-                >Xem phúc lợi của tôi
-              </el-button>
+              <el-popover
+                placement="right"
+                width="600"
+                trigger="click">
+                <el-table :data="welfares">
+                  <el-table-column width="150" property="welfare.name" label="Tên phúc lợi"></el-table-column>
+                  <el-table-column width="250" property="welfare.text" label="Mô tả"></el-table-column>
+                  <el-table-column width="100" property="welfare.price" label="Giá trị"></el-table-column>
+                </el-table>
+                <el-table :data="gerenalWelfares">
+                  <el-table-column width="150" property="name" ></el-table-column>
+                  <el-table-column width="250" property="text" ></el-table-column>
+                  <el-table-column width="100" property="price"></el-table-column>
+                </el-table>
+
+                <el-button  @click="handleShow(form.id)" slot="reference">Kiểm tra phúc lợi</el-button>
+              </el-popover>
             </div>
           </div>
         </transition>
       </div>
-      <div class="hr-image"></div>
+      <div class="hr-image col-3"></div>
     </div>
-    <el-dialog
+    <!-- <el-dialog
       title="Thông tin cá nhân"
       :visible.sync="showDialogAdd"
       width="900px"
       label-width="100px"
       top="5vh"
     >
-      <!-- :before-close="handleClose" -->
       <el-form ref="form" :model="form" label-width="120px">
-        <el-form-item label="Tên">
-          <el-input v-model="form.hoTen"></el-input>
-        </el-form-item>
-      <el-form-item label="Ngày sinh">
-      <el-col :span="11">
-        <el-date-picker type="date" placeholder="Chọn ngày sinh" v-model="form.ngaySinh" style="width: 100%;"></el-date-picker>
-      </el-col>
-      </el-form-item>
-      <el-form-item label="Code">
-        <el-input type="text" v-model="form.maNV"></el-input>
-      </el-form-item>
-      <el-form-item label="Phòng">
-        <el-select v-model="form.phongBan.ten" placeholder="Chọn phòng">
-                <el-option
-                  v-for="item in departments"
-                  :key="item.id"
-                  :value="item.id"
-                >
-                {{item.ten}}
-                </el-option>
-              </el-select>
-</el-form-item>
-      <el-form-item label="Email">
-        <el-input type="text" v-model="form.email"></el-input>
-      </el-form-item>
-      <el-form-item label="Trạng Thái">
-      <el-select v-model="form.trangThai" placeholder="Chọn trạng thái">
-        <el-option label="1.Đang làm" value="1"></el-option>
-        <el-option label="2.Đã nghỉ" value="2"></el-option>
-      </el-select>
-      </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="addStaff(form)">Cập nhật</el-button>
-      </el-form-item>
+          <el-form-item label="Tên">
+            <el-input v-model="form.hoTen"></el-input>
+          </el-form-item>
+
+          <el-form-item label="Code">
+            <el-input type="text" v-model="form.maNV"></el-input>
+          </el-form-item>
+          <el-form-item label="Phòng">
+            <el-select v-model="form.phongBan.ten" placeholder="Chọn phòng">
+                    <el-option
+                      v-for="item in departments"
+                      :key="item.id"
+                      :value="item.id"
+                    >
+                    {{item.ten}}
+                    </el-option>
+                  </el-select>
+          </el-form-item>
+          <el-form-item label="Email">
+            <el-input type="text" v-model="form.email"></el-input>
+          </el-form-item>
+          <el-form-item label="Trạng Thái">
+          <el-select v-model="form.trangThai" placeholder="Chọn trạng thái">
+            <el-option label="1.Đang làm" value="1"></el-option>
+            <el-option label="2.Đã nghỉ" value="2"></el-option>
+          </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="addStaff(form)">Cập nhật</el-button>
+          </el-form-item>
     </el-form>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
 <script>
-import StaffApi from "@/service/hrService";
-let staffApi = new StaffApi();
+// import StaffApi from "@/service/hrService";
+import StaffService from "@/service/hrService";
+// import { response } from "express";
+// import loadingVue from '../../../element/packages/loading/src/loading.vue';
+// import { response } from "express";
+// let staffApi = new StaffApi();
 export default {
   name: "HrList",
-  data() {
+  data () {
     return {
-      departments: [
-        {
-          id: 1,
-          ten:"Phòng Phát Triển Phần Mềm",
-          TrangThai:1
-        },
-        {
-          id: 2,
-          ten:"Phòng Nhân Sự",
-          TrangThai:1
-        },
-        {
-          id: 3,
-          ten:"Phòng Kinh Doanh",
-          TrangThai:1
-        }
-      ],
+      staffs: [],
+      welfares: [],
+      gerenalWelfares: [],
+      departments: [],
+      staffId: '',
+      staff: {
+        code: '',
+        name: '',
+        welfareMoney: '',
+        date: '',
+        email: '',
+        department: ''
+      },
       value: "",
       isShow: false,
       showDialogAdd: false,
-      form: { 
-        hoTen: '',
-        maNV: '',
-        ngaySinh: new Date(),
-        trangThai: '',
-        phongBan: {},
-        email: ''
-      },
-      positions: [
-        {
-          id:1,
-          ten: "Nhân Viên",
-        },
-        {
-          id: 2,
-          ten: "Lãnh Đạo",
-        }
-      ],
-      hrList: [  
-      ],
+      status: true,
     };
   },
   methods: {
     showDialog() {
-      // this.hrInfo = {
-      //     code: 'NV004',
-      // }
-      // this.hrList.push(this.hrInfo);
       this.showDialogAdd = true;
-      // this.form = {};
       this.isShow = false;
     },
     showInfo(item) {
@@ -247,38 +230,75 @@ export default {
         this.isShow = true;
       }, 100);
     },
-    addStaff(form){
-      const qs = require("qs");
-      // this.form.hoTen = '';
-      staffApi.createStaff(qs.stringify(form)).then((res) => {
-        console.log(res.data);
-        staffApi.getAllStaff().then((res) => {
-            // self.isLoaded = true;
-            this.list = res.data;
-          });
-        });
-      this.showDialogAdd = false;
-      location.reload()
+ 
+    getAll () {
+      StaffService.getAll()
+      .then(response => {
+        this.staffs = response.data
+        console.log(response.data)
+      })
     },
-    deleteStaff(item) {
-      staffApi.deleteStaff(item).then((res) => {
-        if (res.status == 200) {
-          const index = this.hrList.findIndex((a) => a.id == item.id);
-          this.hrList.splice(index, 1);
-        }
-      });
-    }
-  },
-  //13221
-  created() {
+    getDepartments () {
+      StaffService.getDepartments()
+      .then(response => {
+        this.departments = response.data
+        console.log(response.data)
+      })
+    },
+    handleShow (id) {
+      this.staffId = id
+      console.log(id)
+      StaffService.getWelfare(id)
+        .then(response => {
+          this.welfares = response.data
+          console.log(response.data)
+        })
+      StaffService.getGeneralWelfare()
+        .then(response => {
+          this.gerenalWelfares = response.data
+          console.log(response.data)
+        })  
+      this.status = false
+    },
 
-    staffApi.getAllStaff().then((res) => {
-      // self.isLoaded = true;
-    this.hrList = res.data;
-      console.log(res.data)
-     
-    });
+    create () {
+      let form = document.querySelector('#form-staff')
+      console.log(form)
+      StaffService.createStaff(form)
+        .then(response => {
+          console.log(response.data)
+        }).catch(e => {
+          console.log(e)
+          alert('loi!')
+        })
+    }
+    // addStaff(form){
+    //   const qs = require("qs");
+    //   // this.form.hoTen = '';
+    //   staffApi.createStaff(qs.stringify(form)).then((res) => {
+    //     console.log(res.data);
+    //     staffApi.getAllStaff().then((res) => {
+    //         // self.isLoaded = true;
+    //         this.list = res.data;
+    //       });
+    //     });
+    //   this.showDialogAdd = false;
+    //   location.reload()
+    // },
+    // deleteStaff(item) {
+    //   staffApi.deleteStaff(item).then((res) => {
+    //     if (res.status == 200) {
+    //       const index = this.hrList.findIndex((a) => a.id == item.id);
+    //       this.hrList.splice(index, 1);
+    //     }
+    //   });
+    // }
   },
+ 
+  mounted () {
+    this.getAll();
+    this.getDepartments()
+  }
 };
 </script>
 
@@ -384,7 +404,7 @@ export default {
 }
 .hr-detail__title {
   color: #000;
-  border-bottom: 2px solid #f004a;
+  border-bottom: 2px solid #f004;
 }
 .hr-detail__close {
   color: #f00;

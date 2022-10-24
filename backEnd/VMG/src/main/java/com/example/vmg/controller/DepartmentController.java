@@ -25,13 +25,12 @@ public class DepartmentController {
     public List<Department> getListPhongBan(){
         return departmentRepository.findAll();
     }
-    @GetMapping("/department")
+    @PostMapping("/department")
     public ResponseEntity<Void> addNhanVien(@ModelAttribute DepartmentForm departmentForm){
         Department department = new Department();
 
-        department.setId(departmentForm.getId());
         department.setName(departmentForm.getName());
-        department.setStatus(departmentForm.getStatus());
+        department.setStatus(0);
         phongBanService.saveOrUpDate(department);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

@@ -11,4 +11,5 @@ public class WelfareForm {
     private String text;
     private BigDecimal price;
 
+
 }
