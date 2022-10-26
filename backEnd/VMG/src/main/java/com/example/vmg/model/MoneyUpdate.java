@@ -13,8 +13,4 @@ public class MoneyUpdate implements Serializable {
     private String maNV;
     private BigDecimal moneyUpdate;
     private Integer status;
-
-
-
-
 }

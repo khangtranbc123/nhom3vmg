@@ -29,4 +29,5 @@ public class Welfare implements Serializable {
     @OneToMany(mappedBy = "welfare")
     private List<RegisterWelfare> registerWelfareList;
 
+
 }

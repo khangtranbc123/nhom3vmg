@@ -17,6 +17,7 @@ import java.util.List;
                 @UniqueConstraint(columnNames = "email"),
                 @UniqueConstraint(columnNames = "code")
         })
+
 public class Staff implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

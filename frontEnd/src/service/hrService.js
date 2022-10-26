@@ -1,12 +1,31 @@
 import axios from 'axios';
-
+import authHeader from './auth-hreader'
 /**
  * Api lấy ra danh sách toàn bộ nhân viên
  * */
 class StaffService {
 
-    async getAll() {
-        return await axios.get('http://localhost:8083/api/staffs')
+    async getAll(params) {
+        return await axios.get('http://localhost:8083/api/staffs', {params, headers: authHeader()})
+    }
+    async getStaff(id) {
+        return await axios.get(`http://localhost:8083/api/staff/${id}`)
+    }
+   
+    async getCode() {
+        return await axios.get('http://localhost:8083/api/getcode')
+    }
+    async getBirthdays() {
+        return await axios.get('http://localhost:8083/api/birthdays')
+    }
+    async getEmail() {
+        return await axios.get('http://localhost:8083/api/getemail')
+    }
+    async getUser() {
+        return await axios.get('http://localhost:8083/api/get-user', { headers: authHeader()})
+    }
+    async getFind(text) {
+        return await axios.get(`http://localhost:8083/api/staffs/find?text=${text}`)
     }
     async getWelfare(id) {
         return await axios.get(`http://localhost:8083/api/staff-show/${id}`);
@@ -19,11 +38,10 @@ class StaffService {
     }
 
     async deleteStaff(id) {
-        return await axios.delete('http://localhost:8083/api/staff/' + id)
+        return await axios.put(`http://localhost:8083/api/staff-delete/${id}`)
     }
-    async updateStaff(id, object) {
-
-        return await axios.put('http://localhost:8083/api/staff/' + id, object)
+    async updateStaff(id, staff) {
+        return await axios.put(`http://localhost:8083/api/staff/${id}`, staff)
     }
     async createStaff(staff) {
         return await axios.post('http://localhost:8083/api/staff', staff)
