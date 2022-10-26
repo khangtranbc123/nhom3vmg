@@ -33,49 +33,91 @@
         </svg>
       </div>
       <div class="header-right" >
-        <div class="header-right__item">
+    
+        <div class="header-right__item" v-if="nhanvien">
             <i class="el-icon-s-home"></i>
             <button class="btn nav-link">Kiểm tra thông tin</button>
         </div>
-        <div class="header-right__item">
+        <div class="header-right__item" v-if="quanly">
           <i class="el-icon-s-order"></i>
           <el-dropdown>
-          <span class="el-dropdown-link" style="cursor: pointer">
-            Quản Lí<i class="el-icon-arrow-down el-icon--right"></i>
+          <span class="el-dropdown-link" style="cursor: pointer; font-size: 19px; color: black;">
+            Quản Lý<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item><router-link to="/hr" style="text-decoration: none;color:black;cursor:pointer width: 100%;">Quản lí nhân viên</router-link></el-dropdown-item>
-                    <el-dropdown-item><router-link to="/" style="text-decoration: none;color:black;cursor:pointer width: 100%;">Quản lí phúc lợi</router-link></el-dropdown-item>
+                    <el-dropdown-item><router-link to="/hr" style="text-decoration: none;color:black;cursor:pointer width: 100%;">Quản lý nhân viên</router-link></el-dropdown-item>
+                    <el-dropdown-item><router-link to="/phucloi" style="text-decoration: none;color:black;cursor:pointer width: 100%;">Quản lỹ phúc lợi</router-link></el-dropdown-item>
                   </el-dropdown-menu>
           </el-dropdown>
         </div>
-        <div class="header-right__item">
-          <el-badge :value="100" :max="99" class="item" style="margin-right: 10px; margin-left: 5px ;">
-              <i class="el-icon-message-solid"></i>
+        <div class="header-right__item" v-if="quanly">
+          <el-badge :value="list.length" :max="99" class="item" style="margin-right: 10px; margin-left: 5px ;">
+              <i class="el-icon-s-claim"></i>
               <router-link style="text-decoration: none;color:black;cursor:pointer"  to="/xetduyet">Xét duyệt </router-link>
            
           </el-badge>
         </div>
+        <el-dropdown>
+          <el-badge :value="listbirthdays.length" :max="10" class="item" style="margin-right: 10px; margin-left: 5px ;">
+              <span class="el-dropdown-link" style="cursor: pointer; font-size: 19px; color: black;">
+              <i class="el-icon-message-solid"></i>
+            </span>
+          </el-badge>
+          
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item style="text-decoration: none;color:black;cursor:pointer width: 100%; font-size: 19px">
+                    <strong>
+                      Có {{listbirthdays.length}} nhân viên sinh nhật trong tháng này
+                    </strong>
+                    <ul v-for="x in listbirthdays" :key="x.id">
+                      <li><strong>Họ tên: </strong> {{x.name}} <strong>Mã Nhân viên: </strong> {{x.code}}</li>
+                    </ul>
+                  </el-dropdown-item>
+                  </el-dropdown-menu>
+          </el-dropdown>
+
 
         <div class="header-right__item" v-if="!loggedIn">
           <div class="header-right__item--text">
             <i class="el-icon-s-custom"></i>
-            <router-link to="/login" style="text-decoration: none;color:black;cursor:pointer">Login</router-link>
+            <router-link to="/" style="text-decoration: none;color:black;cursor:pointer">Login</router-link>
           </div>
         </div>
-
-        <div class="header-right__item" v-if="loggedIn" >
-            <i class="el-icon-s-custom"></i>
-            <button class="btn nav-link" @click="logOut">logOut</button>
-        </div>
       </div>
+      <div class="header-right__item" v-if="loggedIn">
+        <i class="el-icon-s-custom"></i>
+
+          <el-dropdown>
+          <span class="el-dropdown-link" style="cursor: pointer; font-size: 19px;">
+            <span>Hello: <Strong>{{user.userName}}</Strong></span>
+          </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item style="text-decoration: none;color:black;cursor:pointer width: 100%; font-size: 19px">
+                      <button class="btn nav-link" @click="logOut">logOut</button> 
+                  </el-dropdown-item>
+                  </el-dropdown-menu>
+          </el-dropdown>
+        </div>
     </div>
 </template>
   
 <script>
+import moment from "moment"
+
 import login from '@/view/PhucLoiLogin.vue'
+import StaffService from '@/service/hrService'
 export default{
   name: 'app',
+  data() {
+    return {
+      user: {},
+      auth: {},
+      nhanvien: false,
+      quanly: false,
+      list: [],
+      listbirthdays: []
+    }
+  },
   components: login,
   computed: {
     loggedIn () {
@@ -86,7 +128,67 @@ export default{
     logOut() {
       this.$store.dispatch('auth/logout')
       this.$router.push('/login')
+      location.reload(true)
+    },
+    formatDate(value){
+      if (value) {
+        return moment(String(value)).format('DD/MM/yyyy')
+      }
+    },
+    getAll() {
+      StaffService.getRegisterWelfare()
+      .then(response => {
+        this.list = response.data
+      })
+      .catch(e => {
+          console.log(e)
+        })
+    },
+    getBD() {
+      StaffService.getBirthdays()
+      .then(response => {
+        this.listbirthdays = response.data
+      })
+      .catch(e => {
+          console.log(e)
+        })
+    },
+    userExists(name) {
+      return this.auth.some(function(el) {
+        return el.name === name;
+      }); 
+    },
+    getUser() {
+      StaffService.getUser()
+        .then(response => {
+          this.user = response.data
+          console.log(response.data)
+          this.auth = this.user.roles
+          console.log(this.auth)
+          if(this.userExists("ROLE_USER")){
+            this.nhanvien = true
+          }
+          if(this.userExists("ROLE_MODERATOR")){
+            this.quanly = true
+          }
+
+        })
+        .catch(e => {
+          console.log(e)
+        })
     }
+
+  },
+  mounted () {
+    // console.log(localStorage.getItem("user"))
+    // this.user = localStorage.getItem("user")
+    // console.log(this.user)
+    // console.log(this.user.roles)
+    this.getUser()
+    this.getAll()
+    this.getBD()
+    
+    
   }
   }
 </script>

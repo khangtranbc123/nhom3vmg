@@ -1,39 +1,41 @@
 <template>
   <div class="login">
     <div class="login-title">
-      <h1>Quản lý phúc lợi của bạn</h1>
+      <h1>Quản lý phúc lợi</h1>
     </div>
     <div class="login-content">
       <form name="form" @submit.prevent="handleLogin">
         <div class="form-group">
-          <label for="username">Username </label>
           <input
               v-model="user.userName"
-              type="text"
+              type="email"
               class="form-control"
               name="username"
+              placeholder="Nhập email"
+              required
           />
         </div>
         <br>
         <div class="form-group">
-          <label for="password">Password </label>
           <input
               v-model="user.passWord"
               type="password"
               class="form-control"
               name="password"
+              placeholder="Nhập password"
+              required
           />
         </div>
         <br>
         <div class="form-group" id="bt">
-          <button class="btn btn-primary btn-block" :disabled="loading">
+          <button class="btn btn-danger btn-block" :disabled="loading">
             <span v-show="loading" class="spinner-border spinner-border-sm"></span>
             <span>Login</span>
           </button>
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
           <div v-if="message" class="alert alert-danger" role="alert">{{message}}</div>
-        </div>
+        </div> -->
       </form>
     </div>
   </div>
@@ -51,15 +53,6 @@ export default {
         username: '',
         password: ''
       },
-      rules: {
-        username: [
-          { required: true, message: 'Vui lòng nhập tên đăng nhập', trigger: 'blur' },
-        ],
-        password: [
-          { required: true, message: 'Vui lòng nhập mật khẩu', trigger: 'blur' },
-          { min: 6, max: 12, message: 'Mật khẩu phải từ 6 đến 12 ký tự', trigger: 'blur' }
-        ]
-      }
     }
   },
   computed: {
@@ -73,16 +66,6 @@ export default {
     }
   },
   methods: {
-    // onSubmit() {
-    //   this.$refs.login.validate((valid) => {
-    //     if (valid) {
-    //       alert('submit!');
-    //     } else {
-    //       console.log('error submit!!');
-    //       return false;
-    //     }
-    //   });
-    // },
     onReset() {
       this.$refs.login.resetFields();
     },
@@ -91,7 +74,12 @@ export default {
         () => {
           this.$router.push('/')
           console.log('ok ok')
-          alert('Đăng nhập thành công!')
+          this.$notify({
+          title: 'Success',
+          message: 'Đăng nhập thành công!',
+          type: 'success'
+        });
+        location.reload(true);
         },
         error => {
           this.loading = false
@@ -99,7 +87,10 @@ export default {
                   (error.response && error.response.data) ||
                   error.message ||
                   error.toString()
-                  alert('Sai thông tin đăng nhập!')
+          this.$notify.error({
+          title: 'Error',
+          message: 'Sai thông tin đăng nhập!'
+        });
         }
       )
     }
@@ -115,9 +106,10 @@ export default {
   top: 80px;
   width: 500px;
   height: 608px;
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.25);
+box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.25);
   margin-left:400px;
   margin-top:80px;
+  background-color:pink;
 }
 
 .login-title {
@@ -169,6 +161,8 @@ input{
   outline: none;
   border:none;
   border-bottom:1px solid black;
+  padding-top:15px !important;
+  padding-bottom:15px !important;
 }
 .btn{
   padding:1px 10px 10px 10px;
@@ -178,6 +172,9 @@ input{
   cursor: pointer;
 
 
+}
+.form-group{
+  margin-left:100px;
 }
 
 </style>
