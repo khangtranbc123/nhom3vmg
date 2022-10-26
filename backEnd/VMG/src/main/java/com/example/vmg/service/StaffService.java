@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
 public class StaffService {
     @Autowired
@@ -39,6 +40,10 @@ public class StaffService {
     public void updateMoney(BigDecimal number, List<Long> ids) {
 //      personRepository.deleteByIdIn(new ArrayList<>(integers));
         staffRepository.updateMoney(number, ids);
+
+    public void updateMoney(BigDecimal number, List<Long> longs) {
+//      personRepository.deleteByIdIn(new ArrayList<>(integers));
+        staffRepository.updateMoney(number, longs);
         System.out.println("update money");
     }
 }

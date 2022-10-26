@@ -17,4 +17,5 @@ public interface StaffRepository extends JpaRepository<Staff,Long> {
     void updateMoney(BigDecimal number, List<Long> longs);
 
     Staff findByEmail(String email);
+
 }

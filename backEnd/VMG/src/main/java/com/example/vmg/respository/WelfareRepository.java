@@ -11,4 +11,8 @@ public interface WelfareRepository extends JpaRepository<Welfare, Long> {
 //    @Transactional
 //    @Query()
 //    void saveRegisterWelfare(Long id_welfare,Long id_user);
+
+
+public interface WelfareRepository extends JpaRepository<Welfare, Long> {
+
 }

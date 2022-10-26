@@ -10,6 +10,6 @@ public class WelfareForm {
     private String name;
     private String text;
     private BigDecimal price;
-
+    private String describe;
 
 }

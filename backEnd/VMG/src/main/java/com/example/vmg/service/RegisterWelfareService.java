@@ -19,6 +19,7 @@ public class RegisterWelfareService {
         return registerWelfareRepository.getAllByStatus();
     }
 
+
     public RegisterWelfare getById(Long id) {
         return registerWelfareRepository.findById(id).get();
     }

@@ -15,6 +15,6 @@ public class GeneralWelfare implements Serializable {
     private Long id;
     private String name;
     private String text;
-    private BigDecimal price;
     private Integer status;
+    private BigDecimal price;
 }

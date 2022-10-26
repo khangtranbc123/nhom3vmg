@@ -11,6 +11,11 @@ import java.io.Serializable;
 @Entity
 @Getter
 @Setter
+import javax.persistence.*;
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+@Entity
 public class WelfareStaff implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
