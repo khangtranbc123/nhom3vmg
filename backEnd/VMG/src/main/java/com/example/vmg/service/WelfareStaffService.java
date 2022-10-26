@@ -38,6 +38,10 @@ public class WelfareStaffService {
     }
 
     public List<WelfareStaff> getbystaff(Long id){
-       return welfareStaffRepository.findByStaff_Id(id);
+       return welfareStaffRepository.findByStaffId(id);
+    }
+
+    public List<WelfareStaff> getbyRegister(){
+        return welfareStaffRepository.getByRegister();
     }
 }

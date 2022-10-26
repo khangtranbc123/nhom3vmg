@@ -3,6 +3,7 @@ package com.example.vmg.controller;
 
 import com.example.vmg.dto.respose.MessageResponse;
 import com.example.vmg.form.StaffForm;
+import com.example.vmg.form.WelfareForm;
 import com.example.vmg.model.ERole;
 import com.example.vmg.model.Role;
 import com.example.vmg.model.Staff;
@@ -12,18 +13,19 @@ import com.example.vmg.service.RoleServiceImpl;
 import com.example.vmg.service.StaffService;
 import com.example.vmg.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import com.example.vmg.model.*;
 import com.example.vmg.service.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.example.vmg.form.StaffForm;
@@ -60,15 +62,32 @@ public class StaffController {
     private WelfareStaffService welfareStaffService;
     @Autowired private WelfareService welfareService;
 
+  //  @PreAuthorize("hasRole('ROLE_MODERATOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+
     @Autowired private StaffRepository staffRepository;
 
-
     @GetMapping("/staffs")
-    public List<Staff> getListNhanVien(){
+    public ResponseEntity<Page<Staff>> getList(@RequestParam(defaultValue = "0") int page
+                                                ,@RequestParam(defaultValue = "10") int pageSize){
+        Sort sort = Sort.by("name").descending();
+        return new ResponseEntity<Page<Staff>>(staffService.getByPage(page, pageSize), HttpStatus.OK);
+    }
+    @GetMapping("/list")
+    public List<Staff> getAlll(){
         return staffService.getList();
     }
-    @PostMapping("/staff")
+    @GetMapping("/staffs/find")
+    public ResponseEntity<Page<Staff>> getListText(@RequestParam(name="text") String text,
+                                                   @RequestParam(defaultValue = "0") int page
+            ,@RequestParam(defaultValue = "5") int pageSize) {
 
+        return new ResponseEntity<Page<Staff>>(staffService.findText(text, page, pageSize), HttpStatus.OK);
+    }
+    @GetMapping("/staff/{id}")
+    public ResponseEntity<?> getStaff(@PathVariable Long id){
+        return new ResponseEntity<Optional<Staff>>(staffService.findById(id), HttpStatus.OK);
+    }
+    @PostMapping("/staff")
     public ResponseEntity<?> addNhanVien(@Valid @ModelAttribute StaffForm staffForm){
         try {
             Staff staff = new Staff();
@@ -103,27 +122,21 @@ public class StaffController {
         }
     }
 
-
-    public ResponseEntity<Void> addNhanVien(@ModelAttribute StaffForm staffForm){
-
-        Staff staff = new Staff();
-        staff.setId(staffForm.getId());
-        staff.setCode(staffForm.getCode());
-        staff.setName(staffForm.getName());
-        staff.setDate(staffForm.getDate());
-        staff.setEmail(staffForm.getEmail());
-        staff.setWelfareMoney(staffForm.getWelfareMoney());
-        staff.setStatus(staffForm.getStatus());
-        staff.setDepartment(staffForm.getDepartment());
-
-        staffService.saveOrUpDate(staff);
+    @PutMapping("/staff-delete/{id}")
+    public ResponseEntity<Void> deleteStaff(@PathVariable Long id){
+        staffService.delete(id);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
-
-    @DeleteMapping("/staff/{id}")
-    public ResponseEntity<Void> deleteStaff(@PathVariable Long id){
-        Staff staff = staffService.getById(id);
-        staffService.delete(id);
+    @PutMapping("/staff/{id}")
+    public ResponseEntity<Void> update(@PathVariable Long id, @ModelAttribute StaffForm staffForm){
+        Staff staff = staffService.findById(id).get();
+        staff.setName(staffForm.getName());
+        staff.setCode(staffForm.getCode());
+        staff.setEmail(staffForm.getEmail());
+        staff.setDepartment(staffForm.getDepartment());
+        staff.setWelfareMoney(staffForm.getWelfareMoney());
+        staff.setDate(staffForm.getDate());
+        staffService.update(id, staff);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
@@ -133,40 +146,73 @@ public class StaffController {
         String.join(",", ids.stream()
                 .map(value ->  Long.toString(value)).collect(Collectors.toList()));
         return ResponseEntity.ok(new MessageResponse("update money staff successfully!"));
-
     }
 
+    @GetMapping("/getcode")
+    public List<String> getCode(){
+        return staffService.getCode();
+    }
+    @GetMapping("/getemail")
+    public List<String> getEmail(){
+        return staffService.getEmail();
+    }
     @GetMapping("/staff-show/{id}")
     public ResponseEntity <List<WelfareStaff>> showWelfare(@PathVariable("id") Long id){
-
         return new ResponseEntity<List<WelfareStaff>>(welfareStaffService.getbystaff(id), HttpStatus.OK);
     }
     @GetMapping("/registers")
-    public ResponseEntity <List<RegisterWelfare>> showRegisterWelfare(){
-        return new ResponseEntity<List<RegisterWelfare>>(registerWelfareService.getByStatus(), HttpStatus.OK);
+    public ResponseEntity <List<WelfareStaff>> getByRegister(){
+        return new ResponseEntity<List<WelfareStaff>>(welfareStaffService.getbyRegister(), HttpStatus.OK);
     }
     @PutMapping("/register/{id}")
-    public ResponseEntity <?> successRegister(@PathVariable Long id){
-        RegisterWelfare registerWelfare = registerWelfareService.findById(id).get();
-        Staff staff = staffService.getByEmail(registerWelfare.getEmail());
-
-        WelfareStaff welfareStaff = new WelfareStaff();
-        welfareStaff.setStaff(staff);
-        welfareStaff.setWelfare(registerWelfare.getWelfare());
+    public ResponseEntity <?> SuccessRegisters(@PathVariable Long id){
+        WelfareStaff welfareStaff = welfareStaffService.findById(id).get();
         welfareStaff.setStatus(0);
-        welfareStaffService.save(welfareStaff);
-
-        registerWelfare.setStatus(1);
-        registerWelfareService.update(id, registerWelfare);
+        welfareStaffService.update(id, welfareStaff);
         return ResponseEntity.ok(new MessageResponse("successfully!"));
     }
     @PutMapping("/register-delete/{id}")
-    public ResponseEntity <?> DeleteRegister(@PathVariable Long id){
-        RegisterWelfare registerWelfare = registerWelfareService.findById(id).get();
-        registerWelfare.setStatus(2);
-        registerWelfareService.update(id, registerWelfare);
+    public ResponseEntity <?> DeleteRegisters(@PathVariable Long id){
+        WelfareStaff welfareStaff = welfareStaffService.findById(id).get();
+        welfareStaff.setStatus(1);
+        welfareStaffService.update(id, welfareStaff);
         return ResponseEntity.ok(new MessageResponse("successfully!"));
     }
+    @GetMapping("/birthdays")
+    public List<Staff> getBirthday(){
+        Calendar cal = Calendar.getInstance();
+        int number = cal.get(Calendar.MONTH)+1;
+        System.out.println(number);
+        return staffService.sinhNhat(number);
+        //return new ResponseEntity<List<Staff>>(staffService.sinhNhat(number), HttpStatus.OK);
+    }
+//    @PutMapping("/register-delete/{id}")
+//    public ResponseEntity <?> DeleteRegister(@PathVariable Long id){
+//        RegisterWelfare registerWelfare = registerWelfareService.findById(id).get();
+//        registerWelfare.setStatus(2);
+//        registerWelfareService.update(id, registerWelfare);
+//        return ResponseEntity.ok(new MessageResponse("successfully!"));
+//    }
+//    @GetMapping("/registers")
+//    public ResponseEntity <List<RegisterWelfare>> showRegisterWelfare(){
+//        return new ResponseEntity<List<RegisterWelfare>>(registerWelfareService.getByStatus(), HttpStatus.OK);
+//    }
+//    @PutMapping("/register/{id}")
+//    public ResponseEntity <?> successRegister(@PathVariable Long id){
+//        RegisterWelfare registerWelfare = registerWelfareService.findById(id).get();
+//        Staff staff = staffService.getByEmail(registerWelfare.getEmail());
+//
+//        WelfareStaff welfareStaff = new WelfareStaff();
+//        welfareStaff.setStaff(staff);
+//        welfareStaff.setWelfare(registerWelfare.getWelfare());
+//        welfareStaff.setStatus(0);
+//        welfareStaffService.save(welfareStaff);
+//
+//        registerWelfare.setStatus(1);
+//        registerWelfareService.update(id, registerWelfare);
+//        return ResponseEntity.ok(new MessageResponse("successfully!"));
+//    }
+
 
 
 

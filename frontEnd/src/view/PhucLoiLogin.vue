@@ -33,9 +33,9 @@
             <span>Login</span>
           </button>
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
           <div v-if="message" class="alert alert-danger" role="alert">{{message}}</div>
-        </div>
+        </div> -->
       </form>
     </div>
   </div>
@@ -53,15 +53,6 @@ export default {
         username: '',
         password: ''
       },
-      rules: {
-        username: [
-          { required: true, message: 'Vui lòng nhập tên đăng nhập', trigger: 'blur' },
-        ],
-        password: [
-          { required: true, message: 'Vui lòng nhập mật khẩu', trigger: 'blur' },
-          { min: 6, max: 12, message: 'Mật khẩu phải từ 6 đến 12 ký tự', trigger: 'blur' }
-        ]
-      }
     }
   },
   computed: {
@@ -75,16 +66,6 @@ export default {
     }
   },
   methods: {
-    // onSubmit() {
-    //   this.$refs.login.validate((valid) => {
-    //     if (valid) {
-    //       alert('submit!');
-    //     } else {
-    //       console.log('error submit!!');
-    //       return false;
-    //     }
-    //   });
-    // },
     onReset() {
       this.$refs.login.resetFields();
     },
@@ -93,7 +74,12 @@ export default {
         () => {
           this.$router.push('/')
           console.log('ok ok')
-          alert('Đăng nhập thành công!')
+          this.$notify({
+          title: 'Success',
+          message: 'Đăng nhập thành công!',
+          type: 'success'
+        });
+        location.reload(true);
         },
         error => {
           this.loading = false
@@ -101,7 +87,10 @@ export default {
                   (error.response && error.response.data) ||
                   error.message ||
                   error.toString()
-                  alert('Sai thông tin đăng nhập!')
+          this.$notify.error({
+          title: 'Error',
+          message: 'Sai thông tin đăng nhập!'
+        });
         }
       )
     }
@@ -117,7 +106,7 @@ export default {
   top: 80px;
   width: 500px;
   height: 608px;
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.25);
+box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.25);
   margin-left:400px;
   margin-top:80px;
   background-color:pink;
