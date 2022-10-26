@@ -15,6 +15,10 @@ public class RegisterWelfareService {
     public List<RegisterWelfare> getList() {
         return registerWelfareRepository.findAll();
     }
+    public List<RegisterWelfare> getByStatus() {
+        return registerWelfareRepository.getAllByStatus();
+    }
+
 
     public RegisterWelfare getById(Long id) {
         return registerWelfareRepository.findById(id).get();
@@ -34,4 +38,5 @@ public class RegisterWelfareService {
     public void delete(Long id) {
         registerWelfareRepository.deleteById(id);
     }
+
 }

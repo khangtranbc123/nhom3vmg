@@ -13,6 +13,11 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Table(uniqueConstraints = {
+                @UniqueConstraint(columnNames = "email"),
+                @UniqueConstraint(columnNames = "code")
+        })
+
 public class Staff implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +30,7 @@ public class Staff implements Serializable {
     private Integer status;
 
     @ManyToOne
-    @JoinColumn(name = "idPhongBan")
+    @JoinColumn(name = "idDepartment")
     private Department department;
 
 

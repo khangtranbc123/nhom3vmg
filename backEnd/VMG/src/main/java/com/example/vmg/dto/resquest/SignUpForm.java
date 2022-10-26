@@ -12,7 +12,7 @@ import java.util.Set;
 @Setter
 public class SignUpForm {
     @NotBlank
-    @Size(min = 3, max = 20)
+    @Size(min = 3, max = 50)
     private String userName;
 
     private Set<String> role;

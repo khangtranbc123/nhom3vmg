@@ -32,57 +32,69 @@
           </defs>
         </svg>
       </div>
-      <div class="header-right">
-        <div class="header-right__item">
-          <el-dropdown>
-    <span class="el-dropdown-link" style="cursor: pointer">
-      Quản Lí<i class="el-icon-arrow-down el-icon--right"></i>
-    </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item><router-link to="/hr" style="text-decoration: none;color:black;cursor:pointer">Quản lí nhân viên</router-link></el-dropdown-item>
-              <el-dropdown-item><router-link to="/" style="text-decoration: none;color:black;cursor:pointer">Quản lí phúc lợi</router-link></el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </div>
+      <div class="header-right" >
         <div class="header-right__item">
           <div class="header-right__item--text">
-            <router-link to="/login" style="text-decoration: none;color:black;cursor:pointer">Login</router-link>
+            <router-link to="/register_welfare" style="text-decoration: none;color:black;cursor:pointer">Đăng Kí Phúc Lợi</router-link>
           </div>
-         
-      
+
           <div class="header-right__item--icon"></div>
         </div>
         <div class="header-right__item">
+            <i class="el-icon-s-home"></i>
+            <button class="btn nav-link">Kiểm tra thông tin</button>
+        </div>
+        <div class="header-right__item">
+          <i class="el-icon-s-order"></i>
+          <el-dropdown>
+          <span class="el-dropdown-link" style="cursor: pointer">
+            Quản Lí<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item><router-link to="/hr" style="text-decoration: none;color:black;cursor:pointer width: 100%;">Quản lí nhân viên</router-link></el-dropdown-item>
+                    <el-dropdown-item><router-link to="/" style="text-decoration: none;color:black;cursor:pointer width: 100%;">Quản lí phúc lợi</router-link></el-dropdown-item>
+                  </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+        <div class="header-right__item">
+          <el-badge :value="100" :max="99" class="item" style="margin-right: 10px; margin-left: 5px ;">
+              <i class="el-icon-message-solid"></i>
+              <router-link style="text-decoration: none;color:black;cursor:pointer"  to="/xetduyet">Xét duyệt </router-link>
+           
+          </el-badge>
+        </div>
+
+        <div class="header-right__item" v-if="!loggedIn">
           <div class="header-right__item--text">
-            <div class="user-image"></div>
+            <i class="el-icon-s-custom"></i>
+            <router-link to="/login" style="text-decoration: none;color:black;cursor:pointer">Login</router-link>
           </div>
-          <div class="header-right__item--icon">
-            <svg
-              width="18"
-              height="11"
-              viewBox="0 0 18 11"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M16 2L9 9L2 2"
-                stroke="black"
-                stroke-width="3"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </div>
+        </div>
+
+        <div class="header-right__item" v-if="loggedIn" >
+            <i class="el-icon-s-custom"></i>
+            <button class="btn nav-link" @click="logOut">logOut</button>
         </div>
       </div>
     </div>
-  </template>
+</template>
   
 <script>
-
+import login from '@/view/PhucLoiLogin.vue'
 export default{
-
-
+  name: 'app',
+  components: login,
+  computed: {
+    loggedIn () {
+      return this.$store.state.auth.status.loggedIn
+    }
+  },
+  methods: {
+    logOut() {
+      this.$store.dispatch('auth/logout')
+      this.$router.push('/login')
+    }
+  }
   }
 </script>
   
@@ -110,7 +122,7 @@ export default{
     align-items: center;
   }
   .header-right__item {
-    margin-right: 23px;
+    margin: 0px 35px 0px 35px;
     display: flex;
     align-items: center;
   }
