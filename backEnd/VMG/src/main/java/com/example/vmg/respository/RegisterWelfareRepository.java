@@ -9,4 +9,8 @@ import java.util.List;
 public interface RegisterWelfareRepository extends JpaRepository<RegisterWelfare, Long> {
     @Query("select x from RegisterWelfare x where x.status = 0")
     public List<RegisterWelfare> getAllByStatus();
+
+
+public interface RegisterWelfareRepository extends JpaRepository<RegisterWelfare, Long> {
+
 }

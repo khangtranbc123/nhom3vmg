@@ -15,6 +15,7 @@ public class RegisterWelfare implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String email;
+    private String code;
     private Integer status;
     @ManyToOne
     @JoinColumn(name = "IdWelfare")

@@ -1,5 +1,6 @@
 package com.example.vmg.controller;
 
+
 import com.example.vmg.dto.respose.MessageResponse;
 import com.example.vmg.form.StaffForm;
 import com.example.vmg.form.WelfareForm;
@@ -27,11 +28,23 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.example.vmg.form.StaffForm;
+import com.example.vmg.model.Staff;
+import com.example.vmg.respository.StaffRepository;
+import com.example.vmg.service.StaffService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/api")
 public class StaffController {
     @Autowired private StaffService staffService;
+
 
 
     @Autowired private StaffRepository staffRepository;
@@ -48,7 +61,11 @@ public class StaffController {
     @Autowired
     private WelfareStaffService welfareStaffService;
     @Autowired private WelfareService welfareService;
-    @PreAuthorize("hasRole('ROLE_MODERATOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+
+  //  @PreAuthorize("hasRole('ROLE_MODERATOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+
+    @Autowired private StaffRepository staffRepository;
+
     @GetMapping("/staffs")
     public ResponseEntity<Page<Staff>> getList(@RequestParam(defaultValue = "0") int page
                                                 ,@RequestParam(defaultValue = "10") int pageSize){
@@ -122,6 +139,7 @@ public class StaffController {
         staffService.update(id, staff);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
+
     @PutMapping("/staff/update-money")
     public ResponseEntity<?> updateMoney(@RequestParam("ids") List<Long> ids, @RequestBody BigDecimal money){
         staffService.updateMoney(money, ids);
@@ -194,6 +212,7 @@ public class StaffController {
 //        registerWelfareService.update(id, registerWelfare);
 //        return ResponseEntity.ok(new MessageResponse("successfully!"));
 //    }
+
 
 
 

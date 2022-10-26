@@ -22,5 +22,8 @@ class WelfareApi {
     async registerWelfare(object) {
         return await axios.post('http://localhost:8083/api/regis_welfare', object)
     }
+    async findID(username) {
+        return await axios.get('http://localhost:8083/api/find_id/'+username)
+    }
 }
 export default WelfareApi;
