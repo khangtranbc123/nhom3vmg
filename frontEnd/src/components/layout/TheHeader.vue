@@ -36,6 +36,10 @@
     
         <div class="header-right__item" v-if="nhanvien">
         <div class="header-right__item">
+            <i class="el-icon-s-home"></i>
+            <button class="btn nav-link"><router-link to="/home_welfare" style="text-decoration: none;color:black;cursor:pointer">Các gói phúc lợi</router-link></button>
+        </div>
+        <div class="header-right__item">
           <div class="header-right__item--text">
             <router-link to="/register_welfare" style="text-decoration: none;color:black;cursor:pointer">Đăng Kí Phúc Lợi</router-link>
           </div>

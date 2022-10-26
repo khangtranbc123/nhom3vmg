@@ -1,8 +1,9 @@
 <template>
-  <div>hello {{value}}
-    <input type="checkbox" v-model="value" value="phong1" />
-    <input type="checkbox" v-model="value" value="phong2" />
-    <input type="checkbox" v-model="value" value="phong3" />
+  <div>
+    <select name="LeaveType" @change="onChange($event)" class="form-control" v-model="key">
+   <option value="1">Annual Leave/ Off-Day</option>
+   <option value="2">On Demand Leave</option>
+</select>
   </div>
 </template>
 
@@ -10,11 +11,17 @@
 export default {
   data() {
     return {
-      value: [],
+      key: ""
     };
   },
-};
+  methods: {
+        onChange(event) {
+            console.log(event.target.value)
+        }
+    }
+}
 </script>
 
 <style>
-</style>>
+
+</style>

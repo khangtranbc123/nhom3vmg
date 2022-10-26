@@ -59,6 +59,9 @@ public class StaffService {
         staffRepository.updateMoney(number, longs);
         System.out.println("update money");
     }
+
+    public Integer getTotalMoney(Long id){return staffRepository.getMoney(id);}
+
     public void update(Long id, Staff staff) {
         staffRepository.save(staff);
     }

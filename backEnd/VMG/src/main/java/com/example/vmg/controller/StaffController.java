@@ -178,6 +178,12 @@ public class StaffController {
         welfareStaffService.update(id, welfareStaff);
         return ResponseEntity.ok(new MessageResponse("successfully!"));
     }
+
+    @GetMapping("/get_all_money/{id}")
+    public Integer getMoneyWelfare(@PathVariable("id") Long id){
+        return staffService.getTotalMoney(id);
+    }
+
     @GetMapping("/birthdays")
     public List<Staff> getBirthday(){
         Calendar cal = Calendar.getInstance();
@@ -212,7 +218,6 @@ public class StaffController {
 //        registerWelfareService.update(id, registerWelfare);
 //        return ResponseEntity.ok(new MessageResponse("successfully!"));
 //    }
-
 
 
 

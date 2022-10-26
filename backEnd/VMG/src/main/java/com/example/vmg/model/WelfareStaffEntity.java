@@ -25,6 +25,10 @@ public class WelfareStaffEntity {
         this.idWelfare = idWelfare;
     }
 
+    public WelfareStaffEntity() {
+
+    }
+
     public long getId() {
         return id;
     }

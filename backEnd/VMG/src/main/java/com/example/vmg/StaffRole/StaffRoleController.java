@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/api")
@@ -37,6 +39,11 @@ public class StaffRoleController {
     @GetMapping("/find_id/{username}")
     public Long getIdOfAccount(@PathVariable String username){
         return staffService.getByEmail(username).getId();
+    }
+
+    @GetMapping("/find_money/{username}")
+    public BigDecimal getMoneyOfAccount(@PathVariable String username){
+        return staffService.getByEmail(username).getWelfareMoney();
     }
 
 }

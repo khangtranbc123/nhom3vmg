@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -26,6 +27,11 @@ public interface StaffRepository extends JpaRepository<Staff,Long> {
     void delete(Long id);
 
     Staff findByEmail(String email);
+    
+    @Modifying
+    @Transactional
+    @Query("select sum(w.price) from WelfareStaff ws join Welfare w on ws.welfare.id = w.id where ws.welfare.id = :id GROUP BY ws.staff.id")
+    Integer getMoney(@Param("id") Long id);
     
     @Query("select s from Staff s where s.status = 0")
     public Page<Staff> getPage(Pageable pageable);

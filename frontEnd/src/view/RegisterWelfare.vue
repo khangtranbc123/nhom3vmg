@@ -1,10 +1,27 @@
 <template>
   <div class="pl-body">
     <div class="pl-content">
-      <div class="pl-title">DANH SÁCH PHÚC LỢI</div>
+      <div class="pl-title">PHÚC LỢI CÁ NHÂN HÓA</div>
       <div class="pl-ele">
         <div class="pl-table">
           <div class="pl-table__content">
+            <div class="money">
+              <div>
+                Tiền đã dùng:&nbsp;<span style="color: green">{{
+                  formatCurrency(sum)
+                }}</span>
+              </div>
+              <div>
+                Tổng tiền được hưởng:&nbsp;<span style="color: red">{{
+                  formatCurrency(total)
+                }}</span>
+              </div>
+              <div>
+                Tiền còn lại:&nbsp;<span style="color: green">{{
+                  formatCurrency(total - totalMoney)
+                }}</span>
+              </div>
+            </div>
             <form id="form" label-width="120px">
               <table>
                 <thead>
@@ -12,7 +29,7 @@
                     <th>Chọn</th>
                     <th>Tên phúc lợi</th>
                     <th>Mô tả</th>
-                    <th>Thành Tiền(VNĐ)</th>
+                    <th>Thành Tiền</th>
                     <!-- <th>Thao tác</th> -->
                   </tr>
                 </thead>
@@ -31,12 +48,8 @@
 
                     <td>{{ item.name }}</td>
                     <td>{{ item.text }}</td>
-                    <td>{{ item.price }}</td>
+                    <td>{{ formatCurrency(item.price) }}</td>
                   </tr>
-
-                  {{
-                    4000 - totalMoney
-                  }}
                 </tbody>
               </table>
             </form>
@@ -44,13 +57,45 @@
         </div>
 
         <div class="pl-button">
-          <el-button round class="pl-button__detail" @click="registerWelfares"
-            >Thêm mới</el-button
+          <el-popover
+            placement="right"
+            :width="220"
+            trigger="hover"
+            content="Đăng kí các phúc lợi đã tích ở trên"
           >
+            <template #reference>
+              <el-button
+                class="pl-button__detail"
+                @click="centerDialogVisible = true"
+                >Đăng Kí Phúc Lợi</el-button
+              >
+            </template>
+          </el-popover>
         </div>
+        <el-dialog
+          title="Xác nhận"
+          :visible.sync="centerDialogVisible"
+          width="30%"
+          center
+        >
+          <span style="padding-left: 110px"
+            >Bạn có chắc chắn muốn chọn các phúc lợi trên?</span
+          >
+          <div style="text-align: center; margin-top: 10px; color: red">
+            Phúc lợi chỉ được đăng kí 1 lần 1 năm
+          </div>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="centerDialogVisible = false">Cancel</el-button>
+            <el-button
+              type="primary"
+              @click="registerWelfares"
+              style="background-color: red; border: none"
+              >Confirm</el-button
+            >
+          </span>
+        </el-dialog>
       </div>
     </div>
-    <pre>{{userName}}</pre>
   </div>
 </template>
   
@@ -65,16 +110,21 @@ export default {
       selected: [],
       list: [],
       userName: "",
+      sum: 0,
+      userId: 0,
+      centerDialogVisible: false,
+      total: 0,
     };
   },
   computed: {
     totalMoney() {
       if (this.selected.length > 0) {
-        return this.selected
-          .map((x) => x.price)
-          .reduce((total, x) => total + x);
+        return (
+          this.selected.map((x) => x.price).reduce((total, x) => total + x) +
+          this.sum
+        );
       } else {
-        return 0;
+        return this.sum;
       }
     },
   },
@@ -84,43 +134,57 @@ export default {
   methods: {
     disableHandler(item) {
       return (
-        this.totalMoney + item.price > 4000 && !this.selected.includes(item)
+        this.totalMoney + item.price > this.total &&
+        !this.selected.includes(item)
       );
+    },
+    formatCurrency(value) {
+      return Intl.NumberFormat("vi-VN", {
+        style: "currency",
+        currency: "VND",
+      }).format(value);
     },
     async registerWelfares() {
       let object = {
-        id: await (await welfareApi.findID(this.userName)).data,
+        id: this.userId,
         list: [],
       };
+
       let item = "";
-      for(item in this.selected){
-        console.log('ID')
-        console.log(item)
-        object.list.push(parseInt(item) + 1)
+      for (item of this.selected) {
+        object.list.push(parseInt(item.id));
       }
-      console.log('object')
-      console.log(object.list)
-      // console.log(await (await welfareApi.findID(this.userName)).data)
-      // console.log(object)
+
       const res = await welfareApi.registerWelfare(object);
-      console.log((res.status = 201 ? "Thêm thành công" : "Thêm thất bại"));
+      if (res.status == 201) {
+        this.sum = this.totalMoney;
+        this.selected = [];
+        this.totalMoney = 0;
+      }
+      this.centerDialogVisible = false;
     },
   },
   created() {
-    console.log("created");
-    // const self = this;
-
-    welfareApi.getAllWelfare().then((res) => {
-      // self.isLoaded = true;
-      this.list = res.data;
-      console.log(res.data);
-      console.log(this.list);
-    });
-  },
-  mounted() {
     if (localStorage.getItem("user")) {
       this.userName = JSON.parse(localStorage.getItem("user")).userName;
     }
+    welfareApi.getAllWelfare().then((res) => {
+      this.list = res.data;
+    });
+    welfareApi.findID(this.userName).then((x) => {
+      this.userId = x.data;
+      welfareApi.getAllWelfareByUser(x.data).then((x) => {
+        x.data.forEach((item) => {
+          if (item.status !== 1) {
+            this.sum += item.welfare.price;
+          }
+        });
+      });
+    });
+    welfareApi.getTotalMoney(this.userName).then((x) => {
+      this.total = x.data;
+      // console.log(this.total);
+    });
   },
 };
 </script>l
@@ -130,7 +194,7 @@ export default {
   text-align: center;
   font-size: 34px;
   font-weight: 600;
-  font-family: "Poppins";
+  font-family: "Poppins", sans-serif;
   background: rgba(255, 255, 255, 0.13);
   padding: 6px 0px;
 }
@@ -139,6 +203,19 @@ export default {
     #e3c1d3;
   width: 100%;
   height: 100%;
+}
+.money {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+.money div {
+  font-family: "Poppins", sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 139%;
 }
 .pl-table {
   text-align: center;

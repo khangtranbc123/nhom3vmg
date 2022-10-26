@@ -25,5 +25,26 @@ class WelfareApi {
     async findID(username) {
         return await axios.get('http://localhost:8083/api/find_id/'+username)
     }
+    async getAllGeneralWelfare() {
+        return await axios.get('http://localhost:8083/api/general-welfanes');
+    }
+    async deleteGeneralWelfare(id) {
+        return await axios.delete('http://localhost:8083/api/general-welfane/'+id);
+    }
+    async updateGeneralWelfare(id, object) {
+        return await axios.put('http://localhost:8083/api/general-welfane/'+ id, object);
+    }
+    async createGeneralWelfare(object) {
+        return await axios.post('http://localhost:8083/api/general-welfane',object);
+    }
+    async getAllWelfareByUser(id) {
+        return await axios.get('http://localhost:8083/api/staff-show/'+id);
+    }
+    async getTotalMoney(username) {
+        return await axios.get('http://localhost:8083/api/find_money/'+username);
+    }
+    
+
+    
 }
 export default WelfareApi;

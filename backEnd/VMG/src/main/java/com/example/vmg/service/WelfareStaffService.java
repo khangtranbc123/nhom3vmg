@@ -44,4 +44,5 @@ public class WelfareStaffService {
     public List<WelfareStaff> getbyRegister(){
         return welfareStaffRepository.getByRegister();
     }
+
 }

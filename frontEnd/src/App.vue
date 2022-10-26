@@ -26,7 +26,7 @@ export default {
   flex-direction: column;
   width: 100%;
   height: 100vh;
-  background: linear-gradient(90deg, #e4c9ac 0%, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(90deg, #eddaca 0%, rgba(255, 255, 255, 0) 100%), #ebd5e0;
 
 }
 </style>

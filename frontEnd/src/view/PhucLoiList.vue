@@ -1,26 +1,20 @@
 <template>
-  <div class="pl-body">
+  <div class="pl-main">
     <div class="pl-content">
       <div class="pl-title">DANH SÁCH PHÚC LỢI</div>
       <div class="pl-ele">
         <div class="pl-button">
-          <el-button round class="pl-button__detail" @click="showAddForm"
-            >Thêm mới</el-button
-          >
+          <el-button class="pl-button__detail" @click="showAddForm">{{
+            addText
+          }}</el-button>
+          <el-select v-model="value" placeholder="Loại phúc lợi" style="width:auto">
+            <el-option label="Phúc Lợi Cá Nhân Hóa" :value="0"> </el-option>
+            <el-option label="Phúc Lợi Chung" :value="1"> </el-option>
+          </el-select>
         </div>
-        <div class="pl-select">
-            <el-select v-model="value" placeholder="Loại phúc lợi">
-              <el-option>
-                Cá nhân hóa
-              </el-option>
-              <el-option>
-                Chung
-              </el-option>
-            </el-select>
-          </div>
         <div class="pl-table">
           <div class="pl-table__content">
-            <form id="form" label-width="120px">
+            <!-- <form id="form" label-width="120px"> -->
               <table>
                 <thead>
                   <tr>
@@ -32,7 +26,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-if="isShowAdd">
+                  <!-- <tr v-if="isShowAdd">
                     <td></td>
                     <td>
                       <input
@@ -72,7 +66,7 @@
                         >Hủy</el-button
                       >
                     </td>
-                  </tr>
+                  </tr> -->
                   <tr v-for="(item, index) in list" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name }}</td>
@@ -83,21 +77,33 @@
                         <i class="fa fa-edit"></i> </span
                       >&nbsp;<span
                         class="icon-delete"
-                        @click="showDeleteDialog(item.id)"
+                        @click="showFormDelete(item.id)"
                       >
                         <i class="fa fa-trash"></i>
                       </span>
                     </td>
                   </tr>
-
-                  
                 </tbody>
               </table>
-            </form>
+            <!-- </form> -->
           </div>
         </div>
       </div>
     </div>
+    <el-dialog
+      title="Xác nhận"
+      :visible.sync="centerDialogVisible"
+      width="30%"
+      center
+    >
+      <span>Bạn có chắc chắn muốn xóa phúc lợi này?</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="centerDialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="showDeleteDialog(idDelete)"
+          >Confirm</el-button
+        >
+      </span>
+    </el-dialog>
     <el-dialog
       title="Thông tin phúc lợi"
       :visible.sync="isShowEdit"
@@ -135,6 +141,43 @@
         </el-button>
       </span>
     </el-dialog>
+    <el-dialog
+      title="Thêm mới phúc lợi"
+      :visible.sync="isShowAdd"
+      width="600px"
+      label-width="100px"
+      top="5vh"
+    >
+      <el-form
+        :model="add"
+        ref="add"
+        label-width="120px"
+        label-position="top"
+      >
+        <el-row>
+          <el-col :span="6">
+            <el-form-item label="Tên phúc lợi" prop="name">
+              <el-input v-model="add.name"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6" :offset="2">
+            <el-form-item label="Thành tiền" prop="address">
+              <el-input type="number" v-model="add.price"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col>
+            <el-form-item label="Mô tả" prop="code">
+              <el-input type="textarea" v-model="add.text"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button class="hr-detail__button" round @click="Add(add)"
+          >Thêm mới
+        </el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -146,27 +189,52 @@ export default {
   name: "PhucLoiList",
   data() {
     return {
-      value: "",
+      value: 0,
       isShowEdit: false,
       isShowDialog: false,
       isShowAdd: false,
+      idDelete: "",
       edit: {
         id: "",
         name: "",
         text: "",
         price: "",
       },
+      add: {
+        id: "",
+        name: "",
+        text: "",
+        price: "",
+      },
       list: [],
+      centerDialogVisible: false,
+      addText: "Thêm mới phúc lợi cá nhân hóa",
     };
+  },
+  watch: {
+    value: function (newVal) {
+      console.log(newVal);
+      if (newVal === 0) {
+        this.getAllWelfare();
+        this.addText = "Thêm mới phúc lợi cá nhân hóa";
+      } else {
+        this.getAllGeneralWelfares();
+        this.addText = "Thêm mới phúc lợi chung";
+      }
+    },
+    deep: true,
   },
   methods: {
     showAddForm() {
       this.edit = {};
       this.isShowAdd = true;
     },
-    Add() {
+    change(event) {
+      console.log(event.target.value);
+    },
+    Add(add) {
       let isValidate = true;
-      if (!(this.edit.name && this.edit.text && this.edit.price)) {
+      if (!(add.name && add.text && add.price)) {
         this.$alert(
           "Thông tin đầu vào không hợp lệ vui lòng nhập đủ thông tin!",
           "Thông tin không hợp lệ",
@@ -178,15 +246,28 @@ export default {
         isValidate = false;
       }
       if (isValidate) {
-        let form = document.querySelector("#form");
-        console.log(form);
-        welfareApi.createWelfare(form).then((res) => {
-          welfareApi.getAllWelfare().then((res) => {
-            // self.isLoaded = true;
-            this.list = res.data;
+        //let form = document.querySelector("#form");
+        //console.log(form);
+        const qs = require("qs");
+        if (this.value === 0) {
+          welfareApi.createWelfare(qs.stringify(add)).then((res) => {
+            welfareApi.getAllWelfare().then((res) => {
+              // self.isLoaded = true;
+              this.list = res.data;
+            });
           });
-        });
+        }else{
+          welfareApi.createGeneralWelfare(qs.stringify(add)).then((res) => {
+            welfareApi.getAllGeneralWelfare().then((res) => {
+              // self.isLoaded = true;
+              this.list = res.data;
+            });
+          });
+        }
         this.isShowAdd = false;
+        add.name = "";
+        add.price = "";
+        add.text = "";
       }
     },
     Cancel() {
@@ -199,13 +280,32 @@ export default {
         this.isShowEdit = true;
       }, 100);
     },
+    showFormDelete(id) {
+      this.idDelete = id;
+      // alert(id);
+      this.centerDialogVisible = true;
+    },
     showDeleteDialog(item) {
-      welfareApi.deleteWelfare(item).then((res) => {
-        if (res.status == 200) {
-          const index = this.list.findIndex((a) => a.id == item.id);
-          this.list.splice(index, 1);
-        }
-      });
+      if (this.value === 0) {
+        welfareApi.deleteWelfare(item).then((res) => {
+          if (res.status == 200) {
+            const index = this.list.findIndex((a) => a.id == item);
+            // alert(index);
+            this.list.splice(index, 1);
+          }
+        });
+      } else {
+        // alert(item);
+        welfareApi.deleteGeneralWelfare(item).then((res) => {
+          if (res.status == 200) {
+            const index = this.list.findIndex((a) => a.id == item);
+            // alert(index);
+            this.list.splice(index, 1);
+          }
+        });
+      }
+
+      this.centerDialogVisible = false;
     },
     editWel(edit) {
       let isValidate = true;
@@ -222,26 +322,39 @@ export default {
       }
       if (isValidate) {
         const qs = require("qs");
-        welfareApi.updateWelfare(edit.id, qs.stringify(edit));
+        if (this.value === 0)
+          welfareApi.updateWelfare(edit.id, qs.stringify(edit));
+        else welfareApi.updateGeneralWelfare(edit.id, qs.stringify(edit));
         this.isShowEdit = false;
       }
+    },
+    getAllWelfare() {
+      welfareApi.getAllWelfare().then((res) => {
+        // self.isLoaded = true;
+        this.list = res.data;
+        console.log(res.data);
+        console.log(this.list);
+      });
+    },
+    getAllGeneralWelfares() {
+      welfareApi.getAllGeneralWelfare().then((res) => {
+        // self.isLoaded = true;
+        this.list = res.data;
+        console.log(res.data);
+        console.log(this.list);
+      });
     },
   },
   created() {
     console.log("created");
     // const self = this;
-
-    welfareApi.getAllWelfare().then((res) => {
-      // self.isLoaded = true;
-      this.list = res.data;
-      console.log(res.data);
-      console.log(this.list);
-    });
+    this.getAllWelfare();
   },
 };
 </script>l
 
-<style>
+<style scoped>
+
 .pl-title {
   text-align: center;
   font-size: 34px;
@@ -250,12 +363,7 @@ export default {
   background: rgba(255, 255, 255, 0.13);
   padding: 6px 0px;
 }
-.pl-body {
-  background: linear-gradient(90deg, #e4c9ac 0%, rgba(255, 255, 255, 0) 100%),
-    #e3c1d3;
-  width: 100%;
-  height: 100%;
-}
+
 .pl-table {
   text-align: center;
   margin-left: 200px;
@@ -326,11 +434,15 @@ input::-webkit-inner-spin-button {
 .pl-button {
   margin-left: 200px;
   margin-top: 30px;
+  margin-bottom:10px;
 }
 .pl-button__detail {
   color: #f00 !important;
   font-size: 14px !important;
   font-weight: 600 !important;
+  text-align: center;
+  margin-right:10px;
+
 }
 .pl-button__detail:hover {
   background-color: rgba(255, 0, 0, 0.1) !important;
@@ -375,4 +487,5 @@ input::-webkit-inner-spin-button {
   font-weight: 700;
   color: #f00 !important;
 }
+
 </style>

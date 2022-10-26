@@ -32,6 +32,11 @@ const routes = [
       component: () => import("@/view/MyCheckBox.vue"),
     },
     {
+      path: "/home_welfare",
+      name: "HomeWelfare",
+      component: () => import("@/view/PhucLoiHome.vue"),
+    },
+    {
       path: "/xetduyet",
       name: "xetduyet",
       component: () => import("../view/HrAccpetWelfare.vue"),
