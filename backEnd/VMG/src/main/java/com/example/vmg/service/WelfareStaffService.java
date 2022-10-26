@@ -40,4 +40,5 @@ public class WelfareStaffService {
     public List<WelfareStaff> getbystaff(Long id){
        return welfareStaffRepository.findByStaff_Id(id);
     }
+
 }

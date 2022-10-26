@@ -41,4 +41,5 @@ public class StaffService {
         staffRepository.updateMoney(number, ids);
         System.out.println("update money");
     }
+    public Integer getTotalMoney(Long id){return staffRepository.getMoney(id);}
 }

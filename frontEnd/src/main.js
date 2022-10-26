@@ -13,7 +13,7 @@ Vue.config.productionTip = false;
 Vue.use(components); 
 Vue.use(VueSessionStorage)
 
-Vue.config.productionTip = false;
+
 
 Vue.use(ElementUI, { locale });
 

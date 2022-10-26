@@ -103,7 +103,6 @@ public class StaffController {
 
     @GetMapping("/staff-show/{id}")
     public ResponseEntity <List<WelfareStaff>> showWelfare(@PathVariable("id") Long id){
-
         return new ResponseEntity<List<WelfareStaff>>(welfareStaffService.getbystaff(id), HttpStatus.OK);
     }
     @GetMapping("/registers")
@@ -132,6 +131,11 @@ public class StaffController {
         registerWelfareService.update(id, registerWelfare);
         return ResponseEntity.ok(new MessageResponse("successfully!"));
     }
+    @GetMapping("/get_all_money/{id}")
+    public Integer getMoneyWelfare(@PathVariable("id") Long id){
+        return staffService.getTotalMoney(id);
+    }
+
 
 
 //    @PutMapping("/update/{id}")

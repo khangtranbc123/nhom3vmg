@@ -6,9 +6,7 @@ import com.example.vmg.model.RegisterWelfare;
 import com.example.vmg.form.WelfareForm;
 import com.example.vmg.model.Welfare;
 import com.example.vmg.model.GeneralWelfare;
-import com.example.vmg.service.RegisterWelfareService;
-import com.example.vmg.service.GeneralWelfareService;
-import com.example.vmg.service.WelfareService;
+import com.example.vmg.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +22,7 @@ import java.util.List;
 @RequestMapping("/api")
 public class WelfareController {
     @Autowired private WelfareService welfareService;
+    @Autowired private WelfareStaffEntityService welfareStaffEntityService;
     @Autowired private GeneralWelfareService generalWelfareService;
     @Autowired private RegisterWelfareService registerWelfareService;
     //@PreAuthorize("hasRole('ROLE_MODERATOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
@@ -51,7 +50,7 @@ public class WelfareController {
         generalWelfare.setName(welfareForm.getName());
         generalWelfare.setText(welfareForm.getText());
         generalWelfare.setPrice(welfareForm.getPrice());
-        generalWelfare.setStatus(0);
+        generalWelfare.setStatus(1);
         generalWelfareService.save(generalWelfare);
         return ResponseEntity.ok(new MessageResponse("create welfane successfully!"));
     }
@@ -60,6 +59,7 @@ public class WelfareController {
     @DeleteMapping("/welfare/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         Welfare phucLoi = welfareService.getById(id);
+        welfareStaffEntityService.deleteByWelfareId(id);
         welfareService.delete(id);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
@@ -84,6 +84,7 @@ public class WelfareController {
         GeneralWelfare generalWelfare = generalWelfareService.findById(id).get();
         generalWelfare.setName(welfareForm.getName());
         generalWelfare.setPrice(welfareForm.getPrice());
+        generalWelfare.setText(welfareForm.getText());
         generalWelfareService.update(id, generalWelfare);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
